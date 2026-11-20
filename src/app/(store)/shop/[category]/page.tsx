@@ -18,7 +18,7 @@ export async function generateMetadata({
   const match = categories.find((c) => c.slug === category);
   return match
     ? { title: match.name, description: `${match.name} from Yokai Apparel.` }
-    : { title: "Shop" };
+    : { title: "Page not found" };
 }
 
 // The category check runs before any <Suspense> boundary, so an unknown

@@ -38,8 +38,10 @@ export function Gallery({ images }: { images: ProductImage[] }) {
                 onClick={() => setIndex(i)}
                 aria-label={`Show image ${i + 1} of ${images.length}`}
                 aria-pressed={i === index}
-                className={`relative block aspect-[4/5] w-full overflow-hidden border-2 bg-surface ${
-                  i === index ? "border-vermilion" : "border-transparent"
+                className={`relative block aspect-[4/5] w-full overflow-hidden bg-surface ${
+                  i === index
+                    ? "border-2 border-vermilion"
+                    : "border border-muted transition-colors hover:border-bone active:border-bone active:duration-0"
                 }`}
               >
                 <Image

@@ -225,6 +225,12 @@ The store builds these components and no others. Each entry gives the key rules.
 - A sold-out size is `disabled`, has a dashed border, a struck label and the text "Sold out" (`purchase-panel.tsx`, size chip `label`). Arrow keys skip it.
 - A one-size product is preselected (`purchase-panel.tsx`, `onlyOneSize`). With no size picked, Add to cart shows an error under the picker and moves focus to the first available size.
 
+### Gallery thumbnails
+- Shown only when a product has more than one image. A 4-column grid under the main image (`gallery.tsx`, thumbnail `button`). Each thumbnail is a button with `aria-pressed` and a name such as "Show image 2 of 2".
+- Unselected: a 1px `border-muted` (about 7:1 on ink). Hover and pressed: `border-bone`, timing as in section 4 Button, Pressed.
+- Selected: a 2px `border-vermilion`. It keeps its look on hover and press.
+- Why the width change: muted and vermilion differ only by color (about 1.4:1 to each other). The thicker border shows the selected state without color alone.
+
 ### Quantity stepper
 - A minus button, the number, a plus button. Buttons are 44px square, muted border, Phosphor icons at 20px. Each button has a name, for example "Decrease quantity of Kitsune Tee".
 - Minimum 1. At 1 the minus button is disabled. Remove is a separate action. Maximum is the stock of that size. At the maximum the plus button is disabled.
@@ -1149,6 +1155,12 @@ Regions, top to bottom:
 - The button returns to its label ("Save product", "Delete product", "Update status") and is enabled again. The form values stay.
 - Sonner error toast, with this text: "Could not save. Try again."
 - A field error never goes in a toast. It shows under its field (section 7.3). A failed sign-in is not a toast either (section 7.1).
+
+#### Not found (Phase 5)
+
+- An unknown admin id (`/admin/orders/<id>`, `/admin/products/<id>`) shows a page inside the admin shell, not the store 404. It happens often: the nightly reset deletes rows that an open admin tab may still show.
+- Stock shadcn. Heading (`h1`): "Not found". Text: "This order or product does not exist. The nightly demo reset may have removed it." Button (default variant, a link): "Back to admin", to `/admin`.
+- Until Phase 5 ships it, the store 404 is accepted.
 
 #### Loading
 

@@ -57,7 +57,7 @@ These decisions are settled (grilling session, 2026-11-19). Do not ask them agai
 
 ## Process
 
-- 4 phases. Each ends with a sub-agent review and a user check.
+- 5 phases. Each ends with a sub-agent review and a user check.
   1. Setup and store front: repo, schema, seed data, images, credits, logo, Home, Shop, Product, About, Shipping & Returns, Credits. First deploy.
      Then a fix pass for the design list: control borders, name_ja, motion, 2 images per product, Phosphor icons, new logo.
   2. Cart and checkout: drawer, shipping step, demo payment, stock check, order save, confirmation.
@@ -70,6 +70,8 @@ These decisions are settled (grilling session, 2026-11-19). Do not ask them agai
      - Checkout rule added with the admin: a cart line whose product is deleted or hidden (is_active false) counts as sold out (DESIGN.md 6.4 flow and copy; name from the cart's own copy). Update place_order in the same step.
      - Phase 3 design source: DESIGN.md section 7 and 2.8, plus 3.1 header lockup fix, Credits rule and build notes 7.9. Phase 3 adds the 6 seed orders; the reset logic waits for Phase 4.
   4. Demo reset cron (deletes every row the seed does not list, plus all uploads, then writes the seed), then final review of all pages at all widths.
+  5. Polish: corner radius (8px controls, 12px containers), the garment rail hero (replaces the Lantern), new product images (3D renders made in three.js, 2 per product plus rail cut-outs), admin 404 (DESIGN.md 7.7). Ends with a review of all pages at all widths.
+     - Specs for the radius, the rail hero and the images come from the design session as one batch, after the user approves the prototype. That batch also brings new wording for the CLAUDE.md lines it affects.
 - Design freeze: once a phase's fix pass or build brief starts, new design items go to the next phase's brief. The running build does not change.
 - Builder sub-agents: Sonnet. Reviewer sub-agent: Haiku.
 - Test matrix for every page: 375, 768, 1280, 1440 px; WCAG AA contrast; keyboard navigation. Pass or fail per item.

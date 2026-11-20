@@ -49,8 +49,8 @@ export default function ShippingPage() {
           </h2>
           <p className="mt-4 text-bone/90">
             You can return unworn, unwashed items with tags within 30 days for
-            a refund to your original payment method. Return shipping is paid
-            by the customer.
+            a refund to your original payment method. You pay for return
+            shipping.
           </p>
         </section>
 

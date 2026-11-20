@@ -13,7 +13,17 @@ function isActive(pathname: string, href: string) {
     : pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function SiteNav({ items }: { items: NavItem[] }) {
+// Renders the header row in DOM order: Menu button (mobile), logo, links
+// (desktop), cart. The parent row lays them out.
+export function SiteNav({
+  items,
+  logo,
+  cart,
+}: {
+  items: NavItem[];
+  logo: React.ReactNode;
+  cart: React.ReactNode;
+}) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
@@ -36,6 +46,17 @@ export function SiteNav({ items }: { items: NavItem[] }) {
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
+  // The Menu button is hidden from `md`. Close the menu when the viewport
+  // reaches `md`, so it does not come back open after a resize.
+  useEffect(() => {
+    const query = window.matchMedia("(min-width: 48rem)");
+    const onChange = (event: MediaQueryListEvent) => {
+      if (event.matches) setOpen(false);
+    };
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, []);
+
   const linkClass = (href: string) =>
     `transition-colors hover:text-vermilion ${
       isActive(pathname, href) ? "text-vermilion" : "text-bone"
@@ -43,22 +64,6 @@ export function SiteNav({ items }: { items: NavItem[] }) {
 
   return (
     <>
-      <nav aria-label="Main" className="hidden md:block">
-        <ul className="flex items-center gap-8 text-sm font-semibold uppercase tracking-widest">
-          {items.map((item) => (
-            <li key={item.href}>
-              <Link
-                href={item.href}
-                aria-current={isActive(pathname, item.href) ? "page" : undefined}
-                className={`inline-flex min-h-11 items-center ${linkClass(item.href)}`}
-              >
-                {item.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
       <div className="md:hidden">
         <button
           ref={menuButton}
@@ -99,6 +104,26 @@ export function SiteNav({ items }: { items: NavItem[] }) {
           </ul>
         </nav>
       </div>
+
+      {logo}
+
+      <nav aria-label="Main" className="hidden md:block">
+        <ul className="flex items-center gap-8 text-sm font-semibold uppercase tracking-widest">
+          {items.map((item) => (
+            <li key={item.href}>
+              <Link
+                href={item.href}
+                aria-current={isActive(pathname, item.href) ? "page" : undefined}
+                className={`inline-flex min-h-11 items-center ${linkClass(item.href)}`}
+              >
+                {item.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      {cart}
     </>
   );
 }

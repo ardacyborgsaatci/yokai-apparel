@@ -97,6 +97,228 @@ body {
   animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* Cart drawer: slides in from the right in 250ms, closes faster in 200ms.
+   The overlay fades with it. Reduced motion is handled below. */
+@keyframes drawer-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes drawer-out {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes overlay-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@utility animate-drawer-in {
+  animation: drawer-in 250ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+@utility animate-drawer-out {
+  animation: drawer-out 200ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+@utility animate-overlay-in {
+  animation: overlay-in 250ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+@utility animate-overlay-out {
+  animation: overlay-out 200ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+/* Home hero: Lantern (DESIGN.md 6.5). Plain classes, no new color token.
+   --r: light radius. --ks: kanji scale. --ax, --ay: rest position of the light
+   (the first kanji). --lx, --ly: light position. JS writes them in px. */
+.lantern {
+  --r: 80px;
+  --ks: 1;
+  --ax: 83%;
+  --ay: 17%;
+  --lx: var(--ax);
+  --ly: var(--ay);
+}
+
+@media (max-width: 639px) {
+  .lantern {
+    --r: 60px;
+    --ax: 17%;
+    --ay: 12.5%;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .lantern {
+    --ax: 17%;
+    --ay: 12.5%;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .lantern {
+    --ks: 0.85;
+  }
+}
+
+@media (max-width: 359px) {
+  .lantern {
+    --ks: 0.8;
+  }
+}
+
+/* Text protection. .lamp is an empty box in the same grid cell as the text, so
+   its box is the text block. The clip keeps an L shape: all of the area above
+   the text (less 1rem) and all of the area right of it (less 2rem). The beams
+   are positioned against the hero, and the clip applies to them too. */
+.lamp {
+  grid-area: 1 / 1;
+  pointer-events: none;
+  clip-path: polygon(
+    -100vmax -100vmax,
+    100vmax -100vmax,
+    100vmax 100vmax,
+    calc(100% + 2rem) 100vmax,
+    calc(100% + 2rem) -1rem,
+    -100vmax -1rem
+  );
+}
+
+/* Above the veil (-z-16), below the text gradients (-z-10). */
+.lamp-photo {
+  z-index: -14;
+}
+
+/* Above the gradients, below the text. */
+.lamp-kanji {
+  z-index: -6;
+}
+
+.lamp-beam {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-image: var(--mask);
+  mask-image: var(--mask);
+}
+
+/* The mask only needs alpha, so it uses plain black. */
+.lamp-lit {
+  --mask: radial-gradient(
+    circle var(--r) at var(--lx) var(--ly),
+    #000 0,
+    #000 38%,
+    rgb(0 0 0 / 0.55) 68%,
+    transparent 100%
+  );
+  background:
+    linear-gradient(
+      color-mix(in srgb, var(--color-bone) 14%, transparent),
+      color-mix(in srgb, var(--color-bone) 14%, transparent)
+    ),
+    url(/images/hero-dark-street.webp) center / cover no-repeat,
+    url(/images/hero-dark-street.webp) center / cover no-repeat,
+    url(/images/hero-dark-street.webp) center / cover no-repeat;
+  background-blend-mode: normal, screen, screen, normal;
+}
+
+.lamp-glyphs {
+  --mask: radial-gradient(
+    circle var(--r) at var(--lx) var(--ly),
+    #000 0,
+    #000 70%,
+    transparent 100%
+  );
+}
+
+/* Kanji: a percentage of the hero, centered on the name. */
+.lamp-k {
+  position: absolute;
+  left: var(--px);
+  top: var(--py);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  transform: translate(-50%, -50%);
+}
+
+.lamp-ja {
+  font-size: calc(var(--ps) * var(--ks) * 1px);
+  line-height: 1;
+  writing-mode: vertical-rl;
+  color: var(--color-bone);
+  text-shadow: 0 0 0.12em color-mix(in srgb, var(--color-ink) 60%, transparent);
+}
+
+.lamp-ro {
+  font-size: 0.625rem;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--color-muted);
+  text-shadow: 0 0 0.4em color-mix(in srgb, var(--color-ink) 90%, transparent);
+}
+
+@media (max-width: 1023px) {
+  .lamp-k-lg {
+    display: none;
+  }
+}
+
+@media (max-width: 359px) {
+  .lamp-k-tiny {
+    display: none;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
+  /* DESIGN.md 6.5: the hero is taller in this band, so 鬼 and the rest light move up. */
+  .lantern {
+    --ay: 10%;
+  }
+  .lamp-k-mid {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lamp-k {
+    left: var(--dx);
+    top: var(--dy);
+  }
+
+  .lamp-ja {
+    font-size: calc(var(--ds) * var(--ks) * 1px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

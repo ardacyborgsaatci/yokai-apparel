@@ -7,3 +7,8 @@ export function formatPrice(cents: number): string {
     maximumFractionDigits: 2,
   }).format(cents / 100);
 }
+
+// "Size M", or "One Size" for a product with one size.
+export function sizeLabel(size: string): string {
+  return size === "One Size" ? "One Size" : `Size ${size}`;
+}

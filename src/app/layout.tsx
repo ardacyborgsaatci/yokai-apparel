@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Anton, Inter } from "next/font/google";
+import { CartDrawer } from "@/components/cart-drawer";
+import { CartProvider } from "@/components/cart-provider";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
@@ -17,10 +19,11 @@ const inter = Inter({
   display: "swap",
 });
 
-// Noto Sans JP 500, only the glyphs used: every name_ja value plus the Home
-// hero accent. next/font has no `text` option, so this is a <link> element.
+// Noto Sans JP 500, only the glyphs used: every name_ja value. The Home hero
+// kanji (Lantern) are the same names. next/font has no `text` option, so this
+// is a <link> element.
 // Add a glyph here when a new name_ja value needs one.
-const JP_GLYPHS = "狐鬼狸河童天狗鵺幽霊絡新婦木霊獏化け猫傘おば妖怪";
+const JP_GLYPHS = "狐鬼狸河童天狗鵺幽霊絡新婦木霊獏化け猫傘おば";
 const JP_FONT_URL = `https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap&text=${encodeURIComponent(JP_GLYPHS)}`;
 
 export const metadata: Metadata = {
@@ -51,11 +54,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <SiteHeader />
-        <main id="main" className="flex-1">
-          {children}
-        </main>
-        <SiteFooter />
+        <CartProvider>
+          <SiteHeader />
+          <main id="main" className="flex-1">
+            {children}
+          </main>
+          <SiteFooter />
+          <CartDrawer />
+        </CartProvider>
       </body>
     </html>
   );

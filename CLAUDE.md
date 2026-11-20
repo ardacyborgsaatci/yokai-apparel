@@ -18,6 +18,10 @@ These decisions are settled (grilling session, 2026-11-19). Do not ask them agai
 - Controls: borders on interactive controls must pass 3:1 non-text contrast (use border-muted, not border-line). Dividers may stay border-line.
 - Images: free-license only (Unsplash, Pexels), credited on a Credits page. 2 per product (front, plus back or detail). Art direction: 4:5 portrait, garment centered on dark seamless background, same light on every shot. Lifestyle photos (Home, About) in black and white. No vermilion tint on photos. If no matching licensed shot exists, use an AI-generated image in the same art direction, marked "AI-generated" on the Credits page. No random web images.
 - Known gap (2026-11-20): product photos are still the old Unsplash set (1 per product, light backgrounds). Canva free AI credits ran out; no free matching source found. Image source decided later. No paid credits without the user's approval.
+- Copy and humanizer (2026-11-20): run the `humanizer` skill on all store-facing copy and the README. Not on code comments or commit messages.
+  - Folklore facts and prices stay unchanged; only the wording may change.
+  - Strings that DESIGN.md fixes word for word (checkout, errors, help text, banner, confirmation): humanizer only suggests. Send the suggestions to the design session as one batch; code changes only after DESIGN.md changes.
+  - Existing copy: one copy pass after the Phase 2 build. From Phase 3 on, each brief tells the builder to run humanizer on new copy before it reports.
 - Name check (web only, 2026-11-19): no brand or US trademark "Yokai Apparel" found. Confirm on USPTO before any real launch.
 
 ## Pages
@@ -63,7 +67,17 @@ These decisions are settled (grilling session, 2026-11-19). Do not ask them agai
      - Busy states: no skeletons. Buttons show "Adding..." / "Processing..." and are disabled while busy. Payment "Processing..." about 1.5 s, then confirmation. No toasts in the store. Admin uses shadcn Sonner toasts.
      - Phase 2 design source: DESIGN.md 6.1 to 6.4 (checkout layout, shipping fields, money rules, step bars, confirmation, edge states). Lantern hero (6.5) is the last Phase 2 task; cut it if the phase goes over budget.
   3. Admin: login, product CRUD with upload, orders list and detail with status changes.
-  4. Demo reset cron, then final review of all pages at all widths.
+     - Checkout rule added with the admin: a cart line whose product is deleted or hidden (is_active false) counts as sold out (DESIGN.md 6.4 flow and copy; name from the cart's own copy). Update place_order in the same step.
+     - Phase 3 design source: DESIGN.md section 7 and 2.8, plus 3.1 header lockup fix, Credits rule and build notes 7.9. Phase 3 adds the 6 seed orders; the reset logic waits for Phase 4.
+  4. Demo reset cron (deletes every row the seed does not list, plus all uploads, then writes the seed), then final review of all pages at all widths.
 - Design freeze: once a phase's fix pass or build brief starts, new design items go to the next phase's brief. The running build does not change.
 - Builder sub-agents: Sonnet. Reviewer sub-agent: Haiku.
 - Test matrix for every page: 375, 768, 1280, 1440 px; WCAG AA contrast; keyboard navigation. Pass or fail per item.
+
+## Working with other sessions
+
+- Before you offer the user a change to a phase, ask the build session whether that phase has started.
+- After a peer session restarts, ask whether it still has a message queued before you send it again.
+- A brief for a spec document tells the builder: do not write a new rule or new wording into the spec. List each addition as a question in the report.
+- A brief for a spec document asks only for checks specific to that page. For the standard checks, it points to the test matrix above.
+- If another session owns a contract file, send it the change in the same step.

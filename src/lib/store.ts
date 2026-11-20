@@ -45,6 +45,14 @@ export async function getStore(): Promise<{
   }
 
   const rows = productsRes.data as unknown as ProductRow[];
+  // A product with no category cannot be shown. Skip it, but say so in the log.
+  for (const row of rows) {
+    if (!row.categories) {
+      console.warn(
+        `Product "${row.slug}" has no category. It is hidden from the store.`,
+      );
+    }
+  }
   const products: Product[] = rows
     .filter((row) => row.categories)
     .map((row) => ({

@@ -68,7 +68,13 @@ export default async function ProductPage({
           </p>
           <p className="mt-6 max-w-prose text-muted">{product.description}</p>
           <div className="mt-10">
-            <PurchasePanel variants={product.variants} />
+            <PurchasePanel
+              slug={product.slug}
+              name={product.name}
+              priceCents={product.price_cents}
+              image={product.images[0]?.path ?? null}
+              variants={product.variants}
+            />
           </div>
         </div>
       </div>

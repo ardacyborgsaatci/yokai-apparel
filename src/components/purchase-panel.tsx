@@ -1,28 +1,66 @@
 "use client";
 
+import { Warning } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useState } from "react";
+import { useCart } from "@/components/cart-provider";
 import { ONE_SIZE, type Variant } from "@/lib/catalog";
 
-// Size picker and the Add to cart button. The button has no action yet
-// (the cart arrives in the next phase).
-export function PurchasePanel({ variants }: { variants: Variant[] }) {
+const sizeId = (size: string) => `size-${size.replace(/\s+/g, "-").toLowerCase()}`;
+
+// Size picker and the Add to cart button.
+export function PurchasePanel({
+  slug,
+  name,
+  priceCents,
+  image,
+  variants,
+}: {
+  slug: string;
+  name: string;
+  priceCents: number;
+  image: string | null;
+  variants: Variant[];
+}) {
+  const { add, openDrawer } = useCart();
   const onlyOneSize =
     variants.length === 1 && variants[0].size === ONE_SIZE && variants[0].stock > 0;
   const [selected, setSelected] = useState<string | null>(
     onlyOneSize ? ONE_SIZE : null,
   );
+  const [showError, setShowError] = useState(false);
+
+  // The cart lives in the browser, so adding is instant: no busy state.
+  function onAdd(event: React.MouseEvent<HTMLButtonElement>) {
+    if (!selected) {
+      setShowError(true);
+      const first = variants.find((variant) => variant.stock > 0);
+      if (first) document.getElementById(sizeId(first.size))?.focus();
+      return;
+    }
+    const variant = variants.find((item) => item.size === selected);
+    if (!variant) return;
+    add({
+      slug,
+      size: variant.size,
+      name,
+      priceCents,
+      image,
+      max: variant.stock,
+    });
+    openDrawer(event.currentTarget);
+  }
 
   return (
     <div>
-      <fieldset>
+      <fieldset aria-describedby={showError ? "size-error" : undefined}>
         <legend className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">
           Size
         </legend>
         <div className="mt-3 flex flex-wrap gap-2">
           {variants.map((variant) => {
             const soldOut = variant.stock <= 0;
-            const id = `size-${variant.size.replace(/\s+/g, "-").toLowerCase()}`;
+            const id = sizeId(variant.size);
             return (
               <div key={variant.size}>
                 <input
@@ -32,7 +70,10 @@ export function PurchasePanel({ variants }: { variants: Variant[] }) {
                   value={variant.size}
                   disabled={soldOut}
                   checked={selected === variant.size}
-                  onChange={() => setSelected(variant.size)}
+                  onChange={() => {
+                    setSelected(variant.size);
+                    setShowError(false);
+                  }}
                   className="peer sr-only"
                 />
                 <label
@@ -52,10 +93,21 @@ export function PurchasePanel({ variants }: { variants: Variant[] }) {
             );
           })}
         </div>
+        {showError && (
+          <p
+            id="size-error"
+            role="alert"
+            className="mt-3 flex items-start gap-2 text-sm text-vermilion"
+          >
+            <Warning size={20} aria-hidden="true" className="shrink-0" />
+            Choose a size.
+          </p>
+        )}
       </fieldset>
 
       <button
         type="button"
+        onClick={onAdd}
         className="display mt-8 flex min-h-14 w-full items-center justify-center bg-vermilion px-8 text-xl text-ink transition-colors hover:bg-bone"
       >
         Add to cart

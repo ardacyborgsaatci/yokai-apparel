@@ -18,19 +18,20 @@ export default function AboutPage() {
       <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_28rem] lg:gap-16">
         <div className="max-w-prose space-y-6 text-lg text-bone/90">
           <p>
-            In Japanese folklore, yokai are the strange spirits of the
-            everyday: a fox that wears a human face, a river child, an old
-            umbrella that wakes up and walks away. They are playful, odd and
-            never quite gone.
+            In Japanese folklore, yokai are the strange spirits of everyday
+            life: a fox that wears a human face, a river child, an old
+            umbrella that wakes up and walks away. They are playful and odd,
+            and they never quite go away.
           </p>
           <p>
             Yokai Apparel borrows that mood for streetwear. Everything is black,
             off-white or grey, cut simple and made to be worn hard. One flame of
-            vermilion marks the brand, the way a torii gate marks a threshold.
+            vermilion is the mark of the brand, like a torii gate at a
+            threshold.
           </p>
           <p>
-            Each piece takes its name from a spirit. The Kitsune Tee, the Nue
-            Hoodie, the Baku Tote. Small stories you can wear.
+            Each piece is named for a spirit: the Kitsune Tee, the Nue Hoodie,
+            the Baku Tote.
           </p>
 
           <h2 className="display pt-6 text-3xl">About this demo</h2>

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Lantern } from "@/components/lantern";
 import { ProductCard } from "@/components/product-card";
 import { filterProducts } from "@/lib/catalog";
 import { getStore } from "@/lib/store";
@@ -13,15 +14,20 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="relative isolate flex min-h-[34rem] items-end overflow-hidden md:min-h-[42rem]">
+      <section
+        data-lantern=""
+        className="lantern relative isolate flex min-h-[34rem] items-end overflow-hidden md:min-h-[42rem]"
+      >
         <Image
           src="/images/hero-dark-street.webp"
           alt=""
           fill
           priority
+          unoptimized
           sizes="100vw"
           className="-z-20 object-cover object-center"
         />
+        <div aria-hidden="true" className="absolute inset-0 -z-16 bg-ink/86" />
         <div
           aria-hidden="true"
           className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/55 to-ink/10"
@@ -30,45 +36,32 @@ export default async function HomePage() {
           aria-hidden="true"
           className="absolute inset-0 -z-10 bg-gradient-to-r from-ink/90 via-ink/60 to-transparent"
         />
-        <span
-          aria-hidden="true"
-          lang="ja"
-          className="display absolute right-4 top-6 -z-10 text-6xl text-vermilion [writing-mode:vertical-rl] sm:right-8 sm:text-8xl"
-        >
-          妖怪
-        </span>
-        <div className="wrap pb-14 pt-32 md:pb-20">
-          <p className="eyebrow animate-rise">Streetwear for the night</p>
-          <h1
-            className="display animate-rise mt-4 text-6xl sm:text-8xl lg:text-9xl"
-            style={{ animationDelay: "80ms" }}
-          >
-            <span className="block">Wear the</span>{" "}
-            <span className="block">unseen</span>
-          </h1>
-          <p
-            className="animate-rise mt-6 max-w-md text-base text-bone/90 sm:text-lg"
-            style={{ animationDelay: "160ms" }}
-          >
-            Black, off-white and one flame of vermilion. Tees, hoodies and
-            accessories named for the spirits of Japanese folklore.
-          </p>
-          <div
-            className="animate-rise mt-8 flex flex-wrap gap-3"
-            style={{ animationDelay: "240ms" }}
-          >
-            <Link
-              href="/shop"
-              className="display inline-flex min-h-12 items-center bg-vermilion px-8 text-lg text-ink transition-colors hover:bg-bone"
-            >
-              Shop all
-            </Link>
-            <Link
-              href="/about"
-              className="display inline-flex min-h-12 items-center border border-bone px-8 text-lg text-bone transition-colors hover:border-vermilion hover:text-vermilion"
-            >
-              Our story
-            </Link>
+        <div className="wrap grid grid-cols-[fit-content(100%)] justify-start pb-14 pt-32 md:pb-20">
+          <Lantern />
+          <div className="col-start-1 row-start-1">
+            <p className="eyebrow">Streetwear for the night</p>
+            <h1 className="display mt-4 text-6xl sm:text-8xl lg:text-9xl">
+              <span className="block">Wear the</span>{" "}
+              <span className="block">unseen</span>
+            </h1>
+            <p className="mt-6 max-w-md text-base text-bone/90 sm:text-lg">
+              Black, off-white and one flame of vermilion. Tees, hoodies and
+              accessories named for the spirits of Japanese folklore.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href="/shop"
+                className="display inline-flex min-h-12 items-center bg-vermilion px-8 text-lg text-ink transition-colors hover:bg-bone"
+              >
+                Shop all
+              </Link>
+              <Link
+                href="/about"
+                className="display inline-flex min-h-12 items-center border border-bone px-8 text-lg text-bone transition-colors hover:border-vermilion hover:text-vermilion"
+              >
+                Our story
+              </Link>
+            </div>
           </div>
         </div>
       </section>

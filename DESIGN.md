@@ -141,10 +141,10 @@ Rules:
 - **Lockup** (header): the mark at 32px (`h-8 w-8`), then the wordmark (`site-header.tsx`, logo `Link`). Approved by the user, 2026-11-20, for the Phase 3 batch:
   - From `sm` (640px): a 12px gap (`gap-3`), the wordmark at `text-xl` (116px measured).
   - Below `sm`: an 8px gap (`gap-2`), the wordmark at `text-lg` (104px measured).
-  - Below 360px: the mark only. The wordmark is hidden (`max-[359px]:hidden`).
+  - Below 375px: the mark only. The wordmark is hidden (`max-[375px]:hidden`). Tailwind v4 compiles `max-[Npx]` to width < N, so this class shows the wordmark from 375px.
   - The link keeps `aria-label="Yokai Apparel, home"`. The mark and the text inside are `aria-hidden`.
-  - Why: measured in Chrome with Anton and Inter, the mobile header (Menu or Close button, lockup, cart, two 12px gaps, 16px gutters) needs 375.2px with the menu open at `text-xl`. With the rule above it needs 359.6px. At 320px even `text-lg` does not fit.
-  - Test: the build session renders the header at 320, 360 and 375px, with the menu open and closed, and reports pass or fail. The wordmark is on one line or hidden. It never wraps.
+  - Why: measured in Chrome with Anton and Inter, the mobile header (Menu or Close button, lockup, cart, two 12px gaps, 16px gutters) needs 375.2px with the menu open at `text-xl`. With `text-lg` and `gap-2` it needs 359.6px. At 360px that leaves about 0.4px of spare room, so any font rendering change wraps it. From 375px about 15px is spare. At 320px even `text-lg` does not fit.
+  - Test: the build session renders the header at 320, 374 and 375px, with the menu open and closed, and reports pass or fail. The wordmark is on one line or hidden. It never wraps.
 - Clear space around the mark: at least a quarter of its size. Never recolor, rotate, outline or put a shadow on it.
 
 ### 3.2 Japanese names

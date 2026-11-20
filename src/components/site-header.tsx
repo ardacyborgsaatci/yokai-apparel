@@ -37,7 +37,7 @@ export function SiteHeader() {
               />
               <span
                 aria-hidden="true"
-                className="display text-lg max-[360px]:hidden sm:text-xl"
+                className="display text-lg max-[375px]:hidden sm:text-xl"
               >
                 Yokai Apparel
               </span>

@@ -3,7 +3,7 @@
 import { CaretDown, Check, Lock } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
 import { startTransition, useEffect, useRef, useState } from "react";
-import { placeOrder } from "@/app/checkout/actions";
+import { placeOrder } from "@/app/(store)/checkout/actions";
 import { useCart } from "@/components/cart-provider";
 import { EmptyState } from "@/components/empty-state";
 import { FormField } from "@/components/form-field";
@@ -396,7 +396,7 @@ export function CheckoutView() {
           aria-expanded={summaryOpen}
           aria-controls="order-summary-panel"
           onClick={() => setSummaryOpen((open) => !open)}
-          className="flex min-h-14 w-full items-center justify-between gap-4 border border-muted bg-surface px-4 transition-colors hover:border-bone lg:hidden"
+          className="flex min-h-14 w-full items-center justify-between gap-4 border border-muted bg-surface px-4 transition-colors hover:border-bone active:border-bone active:duration-0 lg:hidden"
         >
           <span className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-widest">
             Order summary
@@ -453,7 +453,7 @@ export function CheckoutView() {
                 type="button"
                 aria-label="Edit shipping details"
                 onClick={onEdit}
-                className="inline-flex min-h-11 items-center underline underline-offset-4 transition-colors hover:text-vermilion"
+                className="inline-flex min-h-11 items-center underline underline-offset-4 transition-colors hover:text-vermilion active:text-vermilion active:duration-0"
               >
                 Edit
               </button>
@@ -556,7 +556,7 @@ export function CheckoutView() {
                 </div>
                 <button
                   type="submit"
-                  className="display inline-flex min-h-12 w-full items-center justify-center bg-vermilion px-8 text-lg text-ink transition-colors hover:bg-bone sm:w-auto sm:justify-self-start"
+                  className="display inline-flex min-h-12 w-full items-center justify-center bg-vermilion px-8 text-lg text-ink transition-colors hover:bg-bone active:bg-bone active:duration-0 sm:w-auto sm:justify-self-start"
                 >
                   Continue to payment
                 </button>
@@ -643,7 +643,7 @@ export function CheckoutView() {
                 <button
                   type="submit"
                   aria-disabled={busy}
-                  className="display flex min-h-14 w-full items-center justify-center bg-vermilion px-8 text-xl text-ink transition-colors hover:bg-bone aria-disabled:opacity-70 aria-disabled:hover:bg-vermilion"
+                  className="display flex min-h-14 w-full items-center justify-center bg-vermilion px-8 text-xl text-ink transition-colors hover:bg-bone active:bg-bone active:duration-0 aria-disabled:hover:bg-vermilion aria-disabled:active:bg-vermilion"
                 >
                   {busy ? "Processing..." : `Pay ${formatPrice(totals.totalCents)}`}
                 </button>

@@ -49,7 +49,7 @@ function LineItem({ line }: { line: CartLine }) {
             type="button"
             aria-label={`Remove ${label}`}
             onClick={() => remove(line.slug, line.size)}
-            className="inline-flex min-h-11 items-center text-sm underline underline-offset-4 transition-colors hover:text-vermilion"
+            className="inline-flex min-h-11 items-center text-sm underline underline-offset-4 transition-colors hover:text-vermilion active:text-vermilion active:duration-0"
           >
             Remove
           </button>
@@ -111,7 +111,7 @@ export function CartDrawer() {
             </Dialog.Title>
             <Dialog.Close
               aria-label="Close cart"
-              className="inline-flex h-11 w-11 items-center justify-center border border-muted text-bone transition-colors hover:border-bone"
+              className="inline-flex h-11 w-11 items-center justify-center border border-muted text-bone transition-colors hover:border-bone active:border-bone active:duration-0"
             >
               <X size={20} aria-hidden="true" />
             </Dialog.Close>
@@ -150,7 +150,7 @@ export function CartDrawer() {
                 <Link
                   href="/checkout"
                   onClick={leave}
-                  className="display mt-5 flex min-h-14 w-full items-center justify-center bg-vermilion px-8 text-xl text-ink transition-colors hover:bg-bone"
+                  className="display mt-5 flex min-h-14 w-full items-center justify-center bg-vermilion px-8 text-xl text-ink transition-colors hover:bg-bone active:bg-bone active:duration-0"
                 >
                   Checkout
                 </Link>

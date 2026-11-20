@@ -10,26 +10,10 @@
 
 ### 1.1 Code that does not match this spec yet
 
-The build session fixes these. Each row is a gap, not a design choice.
-
-This table is out of date since the Phase 1 fix pass. Several rows are already fixed in the code. The Design System session audits it after Phase 2.
+Audited 2026-11-20, after Phase 2: every earlier row is fixed in the code. One gap is left.
 
 | Spec | Code today |
 | --- | --- |
-| Control borders use `border-muted` | `border-line` on filter chips (`shop-view.tsx`, `Chip`), Menu button (`site-nav.tsx`, Menu button), size chips (`purchase-panel.tsx`, size chip `label`) |
-| Category filter stays links. Size filter is a native radio group drawn as chips. Sort is a native `<select>` | Size and sort are link chips (`shop-view.tsx`, `Chip` and the filter groups) |
-| Suspense fallback is a plain block of the same height: no shimmer, no fake content shapes | `ShopSkeleton` (`shop-view.tsx`), `ProductSkeleton` (`products/[slug]/page.tsx`), used as Suspense fallbacks (`shop/page.tsx`, `shop/[category]/page.tsx`, `products/[slug]/page.tsx`, each `<Suspense fallback>`) |
-| `html` has `scroll-padding-top` equal to the header height (WCAG 2.4.11) | No `scroll-padding` anywhere in `src/` |
-| Card price is bone, `font-semibold` | Muted (`product-card.tsx`, price `<span>`) |
-| `animate-rise` only on the mobile menu (the Lantern hero replaces it on Home, section 6.5) | Also on the Home hero (`page.tsx`, eyebrow, `h1`, paragraph and button row) and the gallery image (`gallery.tsx`, main `Image`) |
-| Escape returns focus to the Menu button | Escape closes the menu only (`site-nav.tsx`, Escape handler in `SiteNav`) |
-| Header has a cart. Links sit in the center. Mobile order: Menu, logo, cart | No cart. Logo left, links right (`site-header.tsx`, `SiteHeader`). Mobile: logo, then Menu (`site-nav.tsx`, Menu button) |
-| Footer links: About, Shipping & Returns, Image credits | Also "Shop all" (`site-footer.tsx`, `FOOTER_LINKS`) |
-| Product card shows the Japanese name under the English name | Shows the category name (`product-card.tsx`, line under the English name). No `name_ja` in the catalog type (`catalog.ts`, `Product` type) |
-| Product page shows the Japanese name | Not shown (`products/[slug]/page.tsx`, product title block) |
-| Prices always show two decimals: `$38.00` | Whole dollars drop the decimals (`format.ts`, `formatPrice`, fraction digits) |
-| Tailwind default text sizes only | `text-[11px]` (`purchase-panel.tsx`, "Sold out" label in the size chip), `tracking-[0.2em]` (`shop-view.tsx`, `FilterGroup` label; `purchase-panel.tsx`, size `legend`) |
-| Phosphor icons, Noto Sans JP | Neither is installed or loaded (`package.json`, `dependencies`; `layout.tsx`, font setup) |
 | Product photos follow the art direction (`CLAUDE.md:19`) | The old Unsplash set stays for now. The user picks the image source later |
 
 ### 1.2 Open items
@@ -111,7 +95,7 @@ Rules:
 
 | Use | Spec | Source |
 | --- | --- | --- |
-| Color change on hover | Tailwind default `transition-colors` (150ms) | `page.tsx`, primary hero button |
+| Color change on hover and press | Tailwind default `transition-colors` (150ms). The pressed look starts at once (`active:duration-0`) and fades out over 150ms. | `page.tsx`, primary hero button |
 | Image hover | Scale 1.05, 500ms | `page.tsx`, category tile `Image`; `product-card.tsx`, card `Image` |
 | `animate-rise` | 0.7s. Only on the mobile menu. | `globals.css`, `animate-rise` utility; `site-nav.tsx`, `#mobile-menu` `<nav>` |
 | Lantern light | Pointer lag 120ms, idle drift after 3s at 70px/s. Section 6.5. | Not built yet |
@@ -213,7 +197,8 @@ The store builds these components and no others. Each entry gives the key rules.
 - Primary: `bg-vermilion text-ink`, hover `bg-bone` (`page.tsx`, primary hero button). Secondary: `border border-bone text-bone`, hover `border-vermilion text-vermilion` (`page.tsx`, secondary hero button).
 - Both use `display text-lg`, `min-h-12`, `px-8`, radius 0. A full-width button uses `min-h-14 text-xl` (`purchase-panel.tsx`, Add to cart button).
 - Text link: bone, underlined, offset 4px, hover vermilion (`purchase-panel.tsx`, Shipping & Returns link).
-- Busy: the label changes ("Adding...", "Processing..."). The button has `aria-disabled="true"`, ignores presses and dims to `opacity-70`. Do not use native `disabled` while busy: it drops keyboard focus. Show a busy label only while real work is pending. No artificial delay.
+- Pressed (approved by the user, 2026-11-20, Phase 3 brief): every store control that has a hover look shows the same look on `active:` too. Reason: Tailwind v4 applies `hover:` only on devices that have hover, so on a phone a tap gave no feedback. Primary: bone fill. Secondary: vermilion border and text. Text links and footer links: vermilion. Menu, cart and quantity buttons, and the sort select: bone border. The pressed look starts at once (`active:duration-0`) and fades out over 150ms (section 2.5). No scale, no other motion. Chips have their own pressed look (Size picker, Filter bar). A busy or disabled control shows no pressed look. All these color pairs are already checked in section 2.1.
+- Busy: the label changes ("Adding...", "Processing..."). The button has `aria-disabled="true"` and ignores presses. It keeps its full colors: no `opacity` change, because the busy label is the only progress signal and must stay readable (ink on vermilion at 70% opacity is 3.18:1). Do not use native `disabled` while busy: it drops keyboard focus. Show a busy label only while real work is pending. No artificial delay.
 
 ### Product card
 - One link wraps the card (`product-card.tsx`, card `Link`). One 4:5 image (`product-card.tsx`, image box). No hover image swap.
@@ -230,11 +215,13 @@ The store builds these components and no others. Each entry gives the key rules.
 - Category: links, one per category page, so each filter result has its own address. The current one has `aria-current="page"`.
 - Size: a native radio group, drawn as chips like the size picker. Sort: a native `<select>`. State stays in the URL (`catalog.ts`, `shopHref`).
 - Chips and the select have `min-h-11` and a muted border. A selected chip has a bone fill and ink text.
+- Pressed chip (not selected): `active:bg-raised active:border-bone` (bone on raised 14.62:1). A selected chip keeps its selected look when pressed. Timing as in section 4 Button, Pressed.
 - The bar sits between two `border-line` rules (`shop-view.tsx`, filter bar `div`). The result count below uses `role="status"` (`shop-view.tsx`, result count `<p>`).
 
 ### Size picker
 - A `<fieldset>` with a `<legend>`. A native radio group. The radio is visually hidden. The label is the chip (`purchase-panel.tsx`, size `fieldset`).
 - Chip: `min-h-14 min-w-16`, muted border, hover bone border. Selected: bone fill, ink text.
+- Pressed (not selected, not sold out): `active:bg-raised active:border-bone`, the same as the Filter bar chips. A selected chip keeps its selected look. A sold-out chip shows no pressed look.
 - A sold-out size is `disabled`, has a dashed border, a struck label and the text "Sold out" (`purchase-panel.tsx`, size chip `label`). Arrow keys skip it.
 - A one-size product is preselected (`purchase-panel.tsx`, `onlyOneSize`). With no size picked, Add to cart shows an error under the picker and moves focus to the first available size.
 
@@ -467,7 +454,7 @@ Regions, top to bottom on mobile. The desktop position is in each item.
    1. **Demo banner.** Inline message, info kind: "Demo store: no real payment is taken". It is always visible. It has no close button.
    2. **Card form.** Component: Card payment form. Fields in the table below. The card number is prefilled with `4242 4242 4242 4242`. Name on card is full width. Expiry date and CVC share one row at every width (`grid-cols-2 gap-4`).
    3. **Stock error.** Inline message, error kind, `role="alert"`, `tabindex="-1"`. It sits directly above the pay button. It is hidden until a stock failure. The text is in section 6.4. When it shows, focus moves to it.
-   4. **Pay button.** Primary, full width (`min-h-14 text-xl`). Label: "Pay $89.66" (the current total). Busy: "Processing...", `aria-disabled="true"`, `opacity-70`, about 1.5s. Focus stays on the button. Then the confirmation page opens.
+   4. **Pay button.** Primary, full width (`min-h-14 text-xl`). Label: "Pay $89.66" (the current total). Busy: "Processing...", `aria-disabled="true"`, full colors (Busy rule, section 4 Buttons), about 1.5s. Focus stays on the button. Then the confirmation page opens.
 
 | Label | Type, inputmode | Autocomplete | Rule | Error text | Help text |
 | --- | --- | --- | --- | --- | --- |
@@ -758,7 +745,7 @@ The page is one Card, centered in the viewport. Max width 24rem. Use a min heigh
 3. **"Use demo login".** Button, `outline`, `type="button"`, full width. It fills Email and Password. It does not sign in.
 4. **Fields.** Table below. Label above field. Both are required.
 5. **Credentials error.** Hidden until a sign-in fails. Alert, `destructive`, Lucide `CircleAlert`, `role="alert"`, `tabindex="-1"`. Text: "Email or password is wrong." It sits directly above the submit Button. When it shows, focus moves to it. It is one message. It never says which part is wrong. It hides when the next sign-in starts.
-6. **Submit.** Button, default variant, full width. Label "Sign in". Busy: "Signing in...", `disabled`.
+6. **Submit.** Button, default variant, full width. Label "Sign in". Busy: "Signing in...", `aria-disabled="true"`, full color (section 4 Button, Busy).
 
 | Label | Control | Rule | Error text | Help text |
 | --- | --- | --- | --- | --- |
@@ -891,7 +878,7 @@ Regions, top to bottom:
 1. **Details.** Card, `h2` "Details". Fields 1 to 7 in the table below.
 2. **Sizes and stock.** Card, `h2` "Sizes and stock". Fields 8 and 9.
 3. **Images.** Card, `h2` "Images". Two slots. Fields 10 to 13, once per slot.
-4. **Save.** Button, default variant. Label "Save product". Full width below `sm`, then auto width. Busy: "Saving...", `disabled`.
+4. **Save.** Button, default variant. Label "Save product". Full width below `sm`, then auto width. Busy: "Saving...", `aria-disabled="true"`, full color (section 4 Button, Busy).
 5. **Delete.** Edit page only. Section 7.4.
 
 A new product starts with: empty fields, "Visible in store" off, "Clothing sizes (XS to XL)" with stock 0 on every size, and both image slots empty.
@@ -1026,7 +1013,7 @@ Delete exists on the edit page only. The New page, the list rows and the Orders 
    - Body: "It leaves the store now. Past orders keep their own copy of the name, size and price."
    - Two buttons. "Cancel" (AlertDialogCancel). "Delete product" (AlertDialogAction, `destructive`). Focus starts on "Cancel".
    - Escape or "Cancel" closes it. Focus returns to the "Delete product" Button on the page.
-   - Busy: the action reads "Deleting...", `disabled`.
+   - Busy: the action reads "Deleting...", `aria-disabled="true"`, full color (section 4 Button, Busy).
 3. **Success.** The Products list opens. Sonner toast "Product deleted". The list no longer has the product.
 4. **Failure.** The dialog stays open. The action returns to "Delete product". Sonner error toast "Could not save. Try again." (section 7.7).
 
@@ -1088,7 +1075,7 @@ Regions, top to bottom:
 2. **Header.** `h1` "Order YK-10482". Under it, one row: the order date (section 7.7, Formats) and the status Badge (same map as 7.5). The Badge follows the saved status.
 3. **Status.** Card, `h2` "Status".
    - A Select with the options "Pending", "Shipped" and "Cancelled" (`CLAUDE.md:26`). It shows the saved status. Its accessible name comes from the Card title (`aria-labelledby`).
-   - A Button, default variant, "Update status". Busy: "Saving...", `disabled`.
+   - A Button, default variant, "Update status". Busy: "Saving...", `aria-disabled="true"`, full color (section 4 Button, Busy).
    - Success: Sonner toast "Status updated". The Badge in the header changes. The page stays open.
    - Failure: section 7.7.
    - The status is a label only. No status changes the stock. A cancelled order does not give stock back.

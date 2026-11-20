@@ -104,7 +104,7 @@ export default async function OrderPage({ params }: PageProps<"/order/[id]">) {
         <div className="lg:col-start-1 lg:row-start-5">
           <Link
             href="/shop"
-            className="inline-flex min-h-11 items-center underline underline-offset-4 transition-colors hover:text-vermilion"
+            className="inline-flex min-h-11 items-center underline underline-offset-4 transition-colors hover:text-vermilion active:text-vermilion active:duration-0"
           >
             Continue shopping
           </Link>

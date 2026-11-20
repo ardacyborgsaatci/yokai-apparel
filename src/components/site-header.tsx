@@ -23,7 +23,7 @@ export function SiteHeader() {
             <Link
               href="/"
               aria-label="Yokai Apparel, home"
-              className="inline-flex min-h-11 items-center gap-3 lg:justify-self-start"
+              className="inline-flex min-h-11 items-center gap-2 sm:gap-3 lg:justify-self-start"
             >
               <Image
                 src="/logo-mark.svg"
@@ -35,7 +35,10 @@ export function SiteHeader() {
                 aria-hidden="true"
                 className="h-8 w-8"
               />
-              <span aria-hidden="true" className="display text-xl">
+              <span
+                aria-hidden="true"
+                className="display text-lg max-[360px]:hidden sm:text-xl"
+              >
                 Yokai Apparel
               </span>
             </Link>

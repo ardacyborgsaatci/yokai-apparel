@@ -26,7 +26,7 @@ export function EmptyState({
       <Link
         href={actionHref}
         onClick={onAction}
-        className="display mt-6 inline-flex min-h-12 items-center bg-vermilion px-8 text-lg text-ink transition-colors hover:bg-bone"
+        className="display mt-6 inline-flex min-h-12 items-center bg-vermilion px-8 text-lg text-ink transition-colors hover:bg-bone active:bg-bone active:duration-0"
       >
         {actionLabel}
       </Link>

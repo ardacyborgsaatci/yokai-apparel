@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 
 // Cookie-free client for public catalog reads (RLS allows select only).
-// Admin auth in a later phase will use @supabase/ssr with cookies.
+// Admin pages use the cookie client in supabase-server.ts.
 export function createPublicClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;

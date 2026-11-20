@@ -31,7 +31,7 @@ export function ProductCard({
         )}
       </div>
       <div className="mt-3 flex items-baseline justify-between gap-3">
-        <span className="display text-lg group-hover:text-vermilion">
+        <span className="display text-lg group-hover:text-vermilion group-active:text-vermilion">
           {product.name}
         </span>
         <span className="text-sm font-semibold text-bone">

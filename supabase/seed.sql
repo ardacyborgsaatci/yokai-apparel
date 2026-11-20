@@ -149,4 +149,92 @@ where not exists (
   select 1 from public.product_images pi where pi.product_id = p.id and pi.path = i.path
 );
 
+
+-- Demo orders (YK-09001 to YK-09006) ---------------------------------------
+-- Order numbers below 10000 never clash with checkout orders (the sequence starts at 10000).
+-- Money follows the checkout rules: shipping $6, free from $100.00; tax 7.25%, rounded to the cent.
+-- These orders do not change stock. Lines are written once, for an order that has none.
+
+create temp table seed_orders (
+  id uuid primary key,
+  order_number text not null unique,
+  email text not null,
+  full_name text not null,
+  address_line1 text not null,
+  address_line2 text,
+  city text not null,
+  zip text not null,
+  status text not null,
+  age interval not null
+) on commit drop;
+
+insert into seed_orders (id, order_number, email, full_name, address_line1, address_line2, city, zip, status, age) values
+  ('5eed0000-0000-4000-8000-000000009001', 'YK-09001', 'ana@example.com', 'Ana Rivera', '1420 Alameda St', 'Apt 3', 'Los Angeles', '90012', 'shipped', interval '6 days 4 hours'),
+  ('5eed0000-0000-4000-8000-000000009002', 'YK-09002', 'sam@example.com', 'Sam Okafor', '88 Pine Ave', null, 'San Diego', '92101', 'shipped', interval '5 days 2 hours'),
+  ('5eed0000-0000-4000-8000-000000009003', 'YK-09003', 'mia@example.com', 'Mia Chen', '2300 Telegraph Ave', null, 'Berkeley', '94704', 'cancelled', interval '4 days 7 hours'),
+  ('5eed0000-0000-4000-8000-000000009004', 'YK-09004', 'lena@example.com', 'Lena Park', '515 Mission St', 'Unit 12', 'San Francisco', '94105', 'pending', interval '3 days 1 hour'),
+  ('5eed0000-0000-4000-8000-000000009005', 'YK-09005', 'diego@example.com', 'Diego Alvarez', '77 Capitol Mall', null, 'Sacramento', '95814', 'pending', interval '2 days 5 hours'),
+  ('5eed0000-0000-4000-8000-000000009006', 'YK-09006', 'priya@example.com', 'Priya Nair', '910 Higuera St', null, 'San Luis Obispo', '93401', 'pending', interval '9 hours');
+
+create temp table seed_order_lines (
+  order_number text not null,
+  product_slug text not null,
+  size text not null,
+  qty integer not null
+) on commit drop;
+
+insert into seed_order_lines (order_number, product_slug, size, qty) values
+  ('YK-09001', 'nue-hoodie', 'M', 1), ('YK-09001', 'kasa-cap', 'One Size', 1),
+  ('YK-09002', 'oni-tee', 'L', 2),
+  ('YK-09003', 'yurei-hoodie', 'S', 1), ('YK-09003', 'baku-tote', 'One Size', 1), ('YK-09003', 'bakeneko-beanie', 'One Size', 1),
+  ('YK-09004', 'kitsune-tee', 'M', 1),
+  ('YK-09005', 'kodama-hoodie', 'L', 1), ('YK-09005', 'tanuki-tee', 'S', 1),
+  ('YK-09006', 'tengu-tee', 'M', 1), ('YK-09006', 'kappa-tee', 'S', 1);
+
+insert into public.orders (
+  id, order_number, email, full_name, address_line1, address_line2, city, state, zip,
+  subtotal_cents, shipping_cents, tax_cents, total_cents, payment_status, status, created_at
+)
+select o.id, o.order_number, o.email, o.full_name, o.address_line1, o.address_line2, o.city, 'CA', o.zip,
+       t.subtotal, m.shipping, m.tax, t.subtotal + m.shipping + m.tax, 'paid_demo', o.status, now() - o.age
+from seed_orders o
+join (
+  select l.order_number, sum(p.price_cents * l.qty)::integer as subtotal
+  from seed_order_lines l
+  join public.products p on p.slug = l.product_slug
+  group by l.order_number
+) t on t.order_number = o.order_number
+cross join lateral (
+  select case when t.subtotal >= 10000 then 0 else 600 end as shipping,
+         ((t.subtotal::bigint * 725 + 5000) / 10000)::integer as tax
+) m
+on conflict (id) do update
+  set email = excluded.email,
+      full_name = excluded.full_name,
+      address_line1 = excluded.address_line1,
+      address_line2 = excluded.address_line2,
+      city = excluded.city,
+      state = excluded.state,
+      zip = excluded.zip,
+      subtotal_cents = excluded.subtotal_cents,
+      shipping_cents = excluded.shipping_cents,
+      tax_cents = excluded.tax_cents,
+      total_cents = excluded.total_cents,
+      payment_status = excluded.payment_status,
+      status = excluded.status,
+      created_at = excluded.created_at;
+
+insert into public.order_items (
+  order_id, product_id, product_name, product_name_ja, image_path, size,
+  unit_price_cents, quantity, line_total_cents
+)
+select o.id, p.id, p.name, p.name_ja,
+       (select i.path from public.product_images i where i.product_id = p.id order by i.sort, i.id limit 1),
+       l.size, p.price_cents, l.qty, p.price_cents * l.qty
+from seed_order_lines l
+join seed_orders o on o.order_number = l.order_number
+join public.products p on p.slug = l.product_slug
+where not exists (select 1 from public.order_items oi where oi.order_id = o.id)
+order by l.order_number, l.product_slug, l.size;
+
 commit;

@@ -51,13 +51,13 @@ export default async function HomePage() {
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/shop"
-                className="display inline-flex min-h-12 items-center bg-vermilion px-8 text-lg text-ink transition-colors hover:bg-bone"
+                className="display inline-flex min-h-12 items-center bg-vermilion px-8 text-lg text-ink transition-colors hover:bg-bone active:bg-bone active:duration-0"
               >
                 Shop all
               </Link>
               <Link
                 href="/about"
-                className="display inline-flex min-h-12 items-center border border-bone px-8 text-lg text-bone transition-colors hover:border-vermilion hover:text-vermilion"
+                className="display inline-flex min-h-12 items-center border border-bone px-8 text-lg text-bone transition-colors hover:border-vermilion hover:text-vermilion active:border-vermilion active:text-vermilion active:duration-0"
               >
                 Our story
               </Link>
@@ -76,7 +76,7 @@ export default async function HomePage() {
           </div>
           <Link
             href="/shop"
-            className="inline-flex min-h-11 items-center text-sm font-semibold uppercase tracking-widest hover:text-vermilion"
+            className="inline-flex min-h-11 items-center text-sm font-semibold uppercase tracking-widest transition-colors hover:text-vermilion active:text-vermilion active:duration-0"
           >
             View all
           </Link>

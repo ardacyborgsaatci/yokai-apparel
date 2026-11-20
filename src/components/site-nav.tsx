@@ -58,7 +58,7 @@ export function SiteNav({
   }, []);
 
   const linkClass = (href: string) =>
-    `transition-colors hover:text-vermilion ${
+    `transition-colors hover:text-vermilion active:text-vermilion active:duration-0 ${
       isActive(pathname, href) ? "text-vermilion" : "text-bone"
     }`;
 
@@ -71,7 +71,7 @@ export function SiteNav({
           aria-expanded={open}
           aria-controls="mobile-menu"
           onClick={() => setOpen((value) => !value)}
-          className="inline-flex min-h-11 items-center gap-2 border border-muted px-4 text-sm font-semibold uppercase tracking-widest hover:border-bone"
+          className="inline-flex min-h-11 items-center gap-2 border border-muted px-4 text-sm font-semibold uppercase tracking-widest transition-colors hover:border-bone active:border-bone active:duration-0"
         >
           {open ? (
             <X size={20} aria-hidden="true" />

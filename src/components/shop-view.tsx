@@ -26,7 +26,7 @@ function Chip({
       className={`inline-flex min-h-11 min-w-11 items-center justify-center border px-4 text-sm font-semibold transition-colors ${
         active
           ? "border-bone bg-bone text-ink"
-          : "border-muted text-bone hover:border-bone"
+          : "border-muted text-bone hover:border-bone active:border-bone active:bg-raised active:duration-0"
       }`}
     >
       {children}
@@ -111,7 +111,7 @@ export function ShopView({
           </p>
           <Link
             href="/shop"
-            className="display mt-6 inline-flex min-h-12 items-center bg-vermilion px-8 text-lg text-ink hover:bg-bone"
+            className="display mt-6 inline-flex min-h-12 items-center bg-vermilion px-8 text-lg text-ink transition-colors hover:bg-bone active:bg-bone active:duration-0"
           >
             Clear filters
           </Link>

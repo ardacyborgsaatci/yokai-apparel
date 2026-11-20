@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "Photographers behind the pictures on Yokai Apparel.",
 };
 
-type Credit = { use: string; name: string; url: string };
+type Credit = { use: string; name: string; url: string | null };
 
 // Site images that are not stored in the database.
 const SITE_CREDITS: Credit[] = [
@@ -22,17 +22,24 @@ const SITE_CREDITS: Credit[] = [
   },
 ];
 
+// Only an http(s) link goes on the page. The admin form checks this too.
+function safeUrl(value: string | null): string | null {
+  const url = value?.trim() ?? "";
+  return /^https?:\/\//i.test(url) ? url : null;
+}
+
 export default async function CreditsPage() {
   const { products } = await getStore();
 
   const productCredits: Credit[] = products
     .flatMap((product) =>
       product.images
-        .filter((image) => image.credit_name && image.credit_url)
+        // A credit name puts the image on this page. The link is optional.
+        .filter((image) => image.credit_name?.trim())
         .map((image) => ({
           use: product.name,
-          name: image.credit_name as string,
-          url: image.credit_url as string,
+          name: (image.credit_name as string).trim(),
+          url: safeUrl(image.credit_url),
         })),
     )
     .sort((a, b) => a.use.localeCompare(b.use));
@@ -46,17 +53,18 @@ export default async function CreditsPage() {
 
       <div className="mt-8 max-w-prose space-y-4 text-bone/90">
         <p>
-          All photos come from Unsplash and are used under the{" "}
+          Each photo is credited to its photographer, with a link to the source
+          when there is one. Unsplash photos are used under the{" "}
           <a
             href="https://unsplash.com/license"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-bone underline underline-offset-4 hover:text-vermilion"
+            className="text-bone underline underline-offset-4 transition-colors hover:text-vermilion active:text-vermilion active:duration-0"
           >
             Unsplash License
             <span className="sr-only"> (opens in a new tab)</span>
           </a>
-          . Thank you to the photographers below.
+          .
         </p>
         <p className="text-muted">
           Product photos show plain garments for demo purposes. The logo and
@@ -65,21 +73,27 @@ export default async function CreditsPage() {
       </div>
 
       <ul className="mt-10 max-w-3xl divide-y divide-line border-y border-line">
-        {credits.map((credit) => (
+        {credits.map((credit, index) => (
           <li
-            key={`${credit.use}-${credit.url}`}
+            key={`${index}-${credit.use}`}
             className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-4"
           >
             <span className="font-semibold">{credit.use}</span>
-            <a
-              href={credit.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center text-bone underline underline-offset-4 hover:text-vermilion"
-            >
-              Photo by {credit.name} on Unsplash
-              <span className="sr-only"> (opens in a new tab)</span>
-            </a>
+            {credit.url ? (
+              <a
+                href={credit.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-11 items-center text-bone underline underline-offset-4 transition-colors hover:text-vermilion active:text-vermilion active:duration-0"
+              >
+                Photo by {credit.name}
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            ) : (
+              <span className="inline-flex min-h-11 items-center">
+                Photo by {credit.name}
+              </span>
+            )}
           </li>
         ))}
       </ul>

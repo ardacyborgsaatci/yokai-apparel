@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
 import { Anton, Inter } from "next/font/google";
-import { CartDrawer } from "@/components/cart-drawer";
-import { CartProvider } from "@/components/cart-provider";
-import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
 const anton = Anton({
@@ -54,14 +50,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <CartProvider>
-          <SiteHeader />
-          <main id="main" className="flex-1">
-            {children}
-          </main>
-          <SiteFooter />
-          <CartDrawer />
-        </CartProvider>
+        {/* Each layout below renders its own header and the one
+            <main id="main">: the store layout and the admin layouts. */}
+        {children}
       </body>
     </html>
   );

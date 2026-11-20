@@ -78,7 +78,7 @@ export function PurchasePanel({
                 />
                 <label
                   htmlFor={id}
-                  className="flex min-h-14 min-w-16 cursor-pointer flex-col items-center justify-center border border-muted px-4 py-2 text-sm font-semibold transition-colors hover:border-bone peer-checked:border-bone peer-checked:bg-bone peer-checked:text-ink peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-vermilion peer-disabled:cursor-not-allowed peer-disabled:border-dashed peer-disabled:text-muted peer-disabled:hover:border-muted"
+                  className="flex min-h-14 min-w-16 cursor-pointer flex-col items-center justify-center border border-muted px-4 py-2 text-sm font-semibold transition-colors hover:border-bone active:border-bone active:bg-raised active:duration-0 peer-checked:border-bone peer-checked:bg-bone peer-checked:text-ink peer-checked:active:border-bone peer-checked:active:bg-bone peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-vermilion peer-disabled:cursor-not-allowed peer-disabled:border-dashed peer-disabled:text-muted peer-disabled:hover:border-muted peer-disabled:active:border-muted peer-disabled:active:bg-transparent"
                 >
                   <span className={soldOut ? "line-through" : undefined}>
                     {variant.size}
@@ -108,14 +108,14 @@ export function PurchasePanel({
       <button
         type="button"
         onClick={onAdd}
-        className="display mt-8 flex min-h-14 w-full items-center justify-center bg-vermilion px-8 text-xl text-ink transition-colors hover:bg-bone"
+        className="display mt-8 flex min-h-14 w-full items-center justify-center bg-vermilion px-8 text-xl text-ink transition-colors hover:bg-bone active:bg-bone active:duration-0"
       >
         Add to cart
       </button>
 
       <p className="mt-4 text-sm text-muted">
         Free shipping on orders of $100 or more. Otherwise a flat $6.00.{" "}
-        <Link href="/shipping" className="text-bone underline underline-offset-4 hover:text-vermilion">
+        <Link href="/shipping" className="text-bone underline underline-offset-4 transition-colors hover:text-vermilion active:text-vermilion active:duration-0">
           Shipping &amp; Returns
         </Link>
       </p>

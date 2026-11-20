@@ -37,7 +37,7 @@ export default async function ProductPage({
       <nav aria-label="Breadcrumb" className="text-sm text-muted">
         <ol className="flex flex-wrap items-center gap-2">
           <li>
-            <Link href="/shop" className="inline-flex min-h-11 items-center hover:text-vermilion">
+            <Link href="/shop" className="inline-flex min-h-11 items-center transition-colors hover:text-vermilion active:text-vermilion active:duration-0">
               Shop
             </Link>
           </li>
@@ -45,7 +45,7 @@ export default async function ProductPage({
           <li>
             <Link
               href={`/shop/${product.category.slug}`}
-              className="inline-flex min-h-11 items-center hover:text-vermilion"
+              className="inline-flex min-h-11 items-center transition-colors hover:text-vermilion active:text-vermilion active:duration-0"
             >
               {product.category.name}
             </Link>

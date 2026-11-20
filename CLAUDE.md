@@ -1,0 +1,69 @@
+# CLAUDE.md: Yokai Apparel
+
+General working rules live in `~/.claude/CLAUDE.md`. This file holds only the project decisions.
+These decisions are settled (grilling session, 2026-11-19). Do not ask them again. Change them only when the user asks.
+
+## Product
+
+- Portfolio prototype of a clothing store for **Yokai Apparel**. Not a real business.
+- Market: California only. English. USD.
+- Catalog: 12 products, 3 categories (Tees, Hoodies, Accessories). Clothing sizes XS to XL. Stock per size.
+- Style: dark, minimal Japanese-folklore streetwear. Black and off-white, one accent (vermilion). Bold type (Anton + Inter). Logo with a yokai mask mark.
+- Design spec: `DESIGN.md` (repo root), owned by the "Design System" session. It mirrors `src/app/globals.css`. Do not change color tokens in globals.css without that session.
+- One code writer: only this (build) session edits code. The design session writes `DESIGN.md` and the "Design additions" section of this file only, and sends other changes as messages.
+- Logo: delivered by the design session (original geometric mask, not a fox or cat). Claude writes all copy.
+- Japanese name: each product has `name_ja`, shown small and muted under the English name on card and product page. Values come from the design session with a cited folklore source. Never invent them.
+- Motion: the Lantern hero (DESIGN.md 6.5, Phase 2) is the only designed moment on Home. It replaces the hero reveal animation. The mobile menu keeps its reveal. Respect prefers-reduced-motion.
+- Icons: Phosphor (`@phosphor-icons/react`, `/ssr` import in Server Components), regular weight, 20 or 24 px. No Lucide in the store.
+- Controls: borders on interactive controls must pass 3:1 non-text contrast (use border-muted, not border-line). Dividers may stay border-line.
+- Images: free-license only (Unsplash, Pexels), credited on a Credits page. 2 per product (front, plus back or detail). Art direction: 4:5 portrait, garment centered on dark seamless background, same light on every shot. Lifestyle photos (Home, About) in black and white. No vermilion tint on photos. If no matching licensed shot exists, use an AI-generated image in the same art direction, marked "AI-generated" on the Credits page. No random web images.
+- Known gap (2026-11-20): product photos are still the old Unsplash set (1 per product, light backgrounds). Canva free AI credits ran out; no free matching source found. Image source decided later. No paid credits without the user's approval.
+- Name check (web only, 2026-11-19): no brand or US trademark "Yokai Apparel" found. Confirm on USPTO before any real launch.
+
+## Pages
+
+- Store: Home, Shop (all + one page per category), Product, Cart (slide-out drawer), Checkout (shipping, then payment), Order confirmation, About, Shipping & Returns, Image credits.
+- Admin: Login, Products (list, create, edit, delete), Orders (list, detail, status: pending, shipped, cancelled).
+- Footer line states it is a demo store.
+
+## Rules
+
+- Shop: category filter, size filter, sort (newest, price up, price down). No search.
+- Guest checkout only. No customer accounts.
+- Tax: flat 7.25% (California base rate), labelled "estimated".
+- Shipping: flat $6, free on orders of $100.00 or more. Copy: "Free shipping on orders of $100 or more".
+- Payment: full card form UI. Banner "Demo store: no real payment is taken". Prefilled test card 4242 4242 4242 4242. Format check in the browser only. Card data never goes to the server and is never stored. Submit shows a short "processing" state, saves the order as "paid (demo)", then opens the confirmation page. Keep a small payment interface so Stripe can replace the stub later.
+- Stock: sold-out sizes show "Sold out". Checkout checks stock again. A saved order reduces stock.
+- Admin: one admin role. Demo admin email and password shown on the login page. Uploads max 2 MB, JPG/PNG/WebP only.
+- Nightly Vercel cron job reseeds all data, deletes uploads, and keeps Supabase awake (free projects pause after 7 days idle).
+- Out of scope: search, order emails, newsletter, wishlist, reviews, analytics, customer accounts, contact form, FAQ, legal pages, custom domain.
+
+## Design additions (Design System session, 2026-11-19)
+
+- Japanese names use Noto Sans JP, weight 500, loaded only for the glyphs used.
+- Admin keeps Lucide icons inside stock shadcn components. Phosphor is for the store only.
+- Mobile menu stays a disclosure (not a dialog). Escape closes it and returns focus to the Menu button.
+
+## Stack
+
+- Next.js (App Router). Tailwind for the store. shadcn/ui in the admin only.
+- Supabase free project `yokai-apparel`, region `us-west-1`, org "arda": database, admin auth, image storage. Keep the old "arda" project paused (free plan allows 2 active projects).
+- Vercel team "arda", Hobby plan, `*.vercel.app` address. Hobby is non-commercial only; a real launch needs Pro.
+- Code in this folder (`1119`). Public GitHub repo `yokai-apparel`, created with `gh`. Vercel deploys on push.
+
+## Process
+
+- 4 phases. Each ends with a sub-agent review and a user check.
+  1. Setup and store front: repo, schema, seed data, images, credits, logo, Home, Shop, Product, About, Shipping & Returns, Credits. First deploy.
+     Then a fix pass for the design list: control borders, name_ja, motion, 2 images per product, Phosphor icons, new logo.
+  2. Cart and checkout: drawer, shipping step, demo payment, stock check, order save, confirmation.
+     - Cart drawer: Radix Dialog (focus trap), brand styled, radius 0. "Add to cart" opens it and shows the added item. Quantity stepper, remove, subtotal, Checkout button, one line "$X.XX away from free shipping".
+     - Checkout: one page, two steps. Payment unlocks when Shipping is valid; Shipping collapses to a summary with an "Edit" link. Desktop: sticky order summary in a right column. Mobile: order summary collapsed at top, shows the total.
+     - Forms: check each field on blur, error text under the field, on submit with errors move focus to the first bad field. No error summary box. Errors use vermilion + icon + text, never color alone.
+     - Busy states: no skeletons. Buttons show "Adding..." / "Processing..." and are disabled while busy. Payment "Processing..." about 1.5 s, then confirmation. No toasts in the store. Admin uses shadcn Sonner toasts.
+     - Phase 2 design source: DESIGN.md 6.1 to 6.4 (checkout layout, shipping fields, money rules, step bars, confirmation, edge states). Lantern hero (6.5) is the last Phase 2 task; cut it if the phase goes over budget.
+  3. Admin: login, product CRUD with upload, orders list and detail with status changes.
+  4. Demo reset cron, then final review of all pages at all widths.
+- Design freeze: once a phase's fix pass or build brief starts, new design items go to the next phase's brief. The running build does not change.
+- Builder sub-agents: Sonnet. Reviewer sub-agent: Haiku.
+- Test matrix for every page: 375, 768, 1280, 1440 px; WCAG AA contrast; keyboard navigation. Pass or fail per item.

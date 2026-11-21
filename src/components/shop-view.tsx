@@ -23,7 +23,7 @@ function Chip({
       href={href}
       scroll={false}
       aria-current={active ? "page" : undefined}
-      className={`inline-flex min-h-11 min-w-11 items-center justify-center border px-4 text-sm font-semibold transition-colors ${
+      className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border px-4 text-sm font-semibold transition-colors ${
         active
           ? "border-bone bg-bone text-ink"
           : "border-muted text-bone hover:border-bone active:border-bone active:bg-raised active:duration-0"
@@ -104,14 +104,14 @@ export function ShopView({
           ))}
         </ul>
       ) : (
-        <div className="mt-6 border border-line p-8">
+        <div className="mt-6 rounded-xl border border-line p-8">
           <p className="display text-3xl">Nothing here</p>
           <p className="mt-3 max-w-md text-muted">
             No product matches these filters. Try another size or category.
           </p>
           <Link
             href="/shop"
-            className="display mt-6 inline-flex min-h-12 items-center bg-vermilion px-8 text-lg text-ink transition-colors hover:bg-bone active:bg-bone active:duration-0"
+            className="display mt-6 inline-flex min-h-12 items-center rounded-lg bg-red px-8 text-lg text-bone transition-colors hover:bg-bone hover:text-ink active:bg-bone active:text-ink active:duration-0"
           >
             Clear filters
           </Link>

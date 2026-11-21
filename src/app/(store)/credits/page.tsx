@@ -59,7 +59,7 @@ export default async function CreditsPage() {
             href="https://unsplash.com/license"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-bone underline underline-offset-4 transition-colors hover:text-vermilion active:text-vermilion active:duration-0"
+            className="text-bone underline underline-offset-4 transition-colors hover:decoration-2 active:decoration-2 active:duration-0"
           >
             Unsplash License
             <span className="sr-only"> (opens in a new tab)</span>
@@ -84,7 +84,7 @@ export default async function CreditsPage() {
                 href={credit.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center text-bone underline underline-offset-4 transition-colors hover:text-vermilion active:text-vermilion active:duration-0"
+                className="inline-flex min-h-11 items-center text-bone underline underline-offset-4 transition-colors hover:decoration-2 active:decoration-2 active:duration-0"
               >
                 Photo by {credit.name}
                 <span className="sr-only"> (opens in a new tab)</span>

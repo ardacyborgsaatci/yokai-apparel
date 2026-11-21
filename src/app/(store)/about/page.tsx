@@ -26,7 +26,7 @@ export default function AboutPage() {
           <p>
             Yokai Apparel borrows that mood for streetwear. Everything is black,
             off-white or grey, cut simple and made to be worn hard. One flame of
-            vermilion is the mark of the brand, like a torii gate at a
+            red is the mark of the brand, like a torii gate at a
             threshold.
           </p>
           <p>
@@ -44,14 +44,14 @@ export default function AboutPage() {
           <p>
             <Link
               href="/shop"
-              className="display inline-flex min-h-12 items-center bg-vermilion px-8 text-lg text-ink transition-colors hover:bg-bone active:bg-bone active:duration-0"
+              className="display inline-flex min-h-12 items-center rounded-lg bg-red px-8 text-lg text-bone transition-colors hover:bg-bone hover:text-ink active:bg-bone active:text-ink active:duration-0"
             >
               Browse the shop
             </Link>
           </p>
         </div>
 
-        <div className="relative aspect-[2/3] overflow-hidden bg-surface lg:self-start">
+        <div className="relative aspect-[2/3] overflow-hidden rounded-xl bg-surface lg:self-start">
           <Image
             src="/images/tokyo-rain-street.webp"
             alt="A wet street in Tokyo at night, lit by neon signs"

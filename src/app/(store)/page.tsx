@@ -45,19 +45,19 @@ export default async function HomePage() {
               <span className="block">unseen</span>
             </h1>
             <p className="mt-6 max-w-md text-base text-bone/90 sm:text-lg">
-              Black, off-white and one flame of vermilion. Tees, hoodies and
+              Black, off-white and one flame of red. Tees, hoodies and
               accessories named for the spirits of Japanese folklore.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/shop"
-                className="display inline-flex min-h-12 items-center bg-vermilion px-8 text-lg text-ink transition-colors hover:bg-bone active:bg-bone active:duration-0"
+                className="display inline-flex min-h-12 items-center rounded-lg bg-red px-8 text-lg text-bone transition-colors hover:bg-bone hover:text-ink active:bg-bone active:text-ink active:duration-0"
               >
                 Shop all
               </Link>
               <Link
                 href="/about"
-                className="display inline-flex min-h-12 items-center border border-bone px-8 text-lg text-bone transition-colors hover:border-vermilion hover:text-vermilion active:border-vermilion active:text-vermilion active:duration-0"
+                className="display inline-flex min-h-12 items-center rounded-lg border border-bone px-8 text-lg text-bone transition-colors hover:bg-raised active:bg-raised active:duration-0"
               >
                 Our story
               </Link>
@@ -76,7 +76,7 @@ export default async function HomePage() {
           </div>
           <Link
             href="/shop"
-            className="inline-flex min-h-11 items-center text-sm font-semibold uppercase tracking-widest transition-colors hover:text-vermilion active:text-vermilion active:duration-0"
+            className="inline-flex min-h-11 items-center text-sm font-semibold uppercase tracking-widest transition-colors hover:underline active:underline active:duration-0"
           >
             View all
           </Link>
@@ -105,7 +105,7 @@ export default async function HomePage() {
               <li key={category.id}>
                 <Link
                   href={`/shop/${category.slug}`}
-                  className="group relative isolate block aspect-[4/3] overflow-hidden bg-surface md:aspect-[4/5]"
+                  className="group relative isolate block aspect-[4/3] overflow-hidden rounded-xl bg-surface md:aspect-[4/5]"
                 >
                   {image ? (
                     <Image

@@ -28,7 +28,7 @@ export function OrderSummaryBody({
       <ul className="space-y-4">
         {items.map((item) => (
           <li key={item.key} className="flex gap-4">
-            <div className="relative aspect-[4/5] w-14 shrink-0 overflow-hidden bg-raised">
+            <div className="relative aspect-[4/5] w-14 shrink-0 overflow-hidden rounded-lg bg-raised">
               {item.image ? (
                 <Image
                   src={item.image}

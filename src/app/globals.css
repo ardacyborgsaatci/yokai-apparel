@@ -1,16 +1,19 @@
 @import "tailwindcss";
 
-/* Yokai Apparel theme: black, off-white, one vermilion accent.
-   Contrast (WCAG AA): vermilion on ink 5.5:1, on surface 5.1:1, on raised 4.8:1;
-   ink text on vermilion 5.5:1; bone on ink 17:1; muted on ink 7.9:1. */
+/* Yokai Apparel theme: charcoal, bone, a touch of red (DESIGN.md 2.1).
+   Contrast (WCAG AA): bone on ink 13.72:1, on surface 12.50:1, on raised 11.25:1;
+   muted on ink 7.05:1, on surface 6.42:1, on raised 5.78:1; bone on red 5.26:1;
+   error on ink 5.63:1, on surface 5.12:1, on raised 4.61:1.
+   Red is a fill with bone text only: red on ink is 2.61:1, ink on red 2.61:1. */
 @theme {
-  --color-ink: #0a0a0a;
-  --color-surface: #141414;
-  --color-raised: #1c1c1c;
+  --color-ink: #1c1c1c;
+  --color-surface: #242424;
+  --color-raised: #2c2c2c;
   --color-line: #3a3a3a;
-  --color-bone: #f2ede4;
-  --color-muted: #a8a39a;
-  --color-vermilion: #f04e37;
+  --color-bone: #ede6d8;
+  --color-muted: #ada699;
+  --color-red: #b3261e;
+  --color-error: #f06a5f;
 }
 
 @theme inline {
@@ -39,13 +42,13 @@ body {
 
 /* Visible keyboard focus on every interactive element. */
 :focus-visible {
-  outline: 2px solid var(--color-vermilion);
+  outline: 2px solid var(--color-bone);
   outline-offset: 3px;
 }
 
 ::selection {
-  background: var(--color-vermilion);
-  color: var(--color-ink);
+  background: var(--color-red);
+  color: var(--color-bone);
 }
 
 @utility wrap {
@@ -78,7 +81,7 @@ body {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: var(--color-vermilion);
+  color: var(--color-muted);
 }
 
 /* Subtle motion: content rises in once. */

@@ -3,7 +3,7 @@
 import { Warning } from "@phosphor-icons/react";
 
 // Label above the input. Help text, then the error, under the input.
-// An invalid field has a vermilion border, aria-invalid and aria-describedby.
+// An invalid field has an error border, aria-invalid and aria-describedby.
 export function FormField({
   id,
   label,
@@ -56,8 +56,8 @@ export function FormField({
         onBlur={onBlur}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy}
-        className={`mt-2 block min-h-12 w-full border bg-raised px-4 text-base text-bone ${
-          error ? "border-vermilion" : "border-muted hover:border-bone"
+        className={`mt-2 block min-h-12 w-full rounded-lg border bg-raised px-4 text-base text-bone ${
+          error ? "border-error" : "border-muted hover:border-bone"
         }`}
       />
       {help && (
@@ -68,7 +68,7 @@ export function FormField({
       {error && (
         <p
           id={errorId}
-          className="mt-2 flex items-start gap-2 text-sm text-vermilion"
+          className="mt-2 flex items-start gap-2 text-sm text-error"
         >
           <Warning size={20} aria-hidden="true" className="shrink-0" />
           {error}

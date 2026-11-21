@@ -70,9 +70,13 @@ async function adminGate(request: NextRequest) {
 
   if (isAdmin) {
     // Same reason as orderCheck: an unknown product or order id must answer
-    // 404, and the detail pages stream. The rewrite target is a prerendered 404.
-    if (await isMissingDetail(supabase, pathname)) {
-      const missing = NextResponse.rewrite(new URL("/order/sample", request.url));
+    // 404, and the detail pages stream. The rewrite target is the prerendered
+    // 404 of the same admin section: it renders inside the admin shell.
+    const missingSection = await missingDetailSection(supabase, pathname);
+    if (missingSection) {
+      const missing = NextResponse.rewrite(
+        new URL(`/admin/${missingSection}/sample`, request.url),
+      );
       for (const cookie of response.cookies.getAll()) missing.cookies.set(cookie);
       return missing;
     }
@@ -88,38 +92,38 @@ async function adminGate(request: NextRequest) {
   return redirect;
 }
 
-// /admin/products/<id> and /admin/orders/<id>. True when the address cannot
-// show a record: a bad id, or no row the session can read. The pages keep their
-// own notFound() calls as well.
-async function isMissingDetail(
+// /admin/products/<id> and /admin/orders/<id>. Returns the section name when
+// the address cannot show a record: a bad id, or no row the session can read.
+// Returns null otherwise. The pages keep their own notFound() calls as well.
+async function missingDetailSection(
   supabase: SupabaseClient,
   pathname: string,
-): Promise<boolean> {
+): Promise<"orders" | "products" | null> {
   const [, , section, id, ...rest] = pathname.split("/");
-  if (!id || rest.length > 0) return false;
+  if (!id || rest.length > 0) return null;
   try {
     if (section === "orders") {
-      if (!isUuid(id)) return true;
+      if (!isUuid(id)) return "orders";
       const { data, error } = await supabase
         .from("orders")
         .select("id")
         .eq("id", id)
         .maybeSingle();
-      return !error && !data;
+      return !error && !data ? "orders" : null;
     }
     if (section === "products" && id !== "new") {
-      if (!/^\d{1,15}$/.test(id)) return true;
+      if (!/^\d{1,15}$/.test(id)) return "products";
       const { data, error } = await supabase
         .from("products")
         .select("id")
         .eq("id", Number(id))
         .maybeSingle();
-      return !error && !data;
+      return !error && !data ? "products" : null;
     }
   } catch {
     // Database not reachable: let the page decide.
   }
-  return false;
+  return null;
 }
 
 export const config = {

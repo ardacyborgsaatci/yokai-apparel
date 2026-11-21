@@ -23,39 +23,58 @@ Audited 2026-11-20, after Phase 2: every earlier row is fixed in the code. One g
 
 ### 2.1 Color
 
+Palette approved by the user, 2026-11-21, for Phase 5: charcoal and bone, with a touch of red. This section is the Phase 5 target. Until Phase 5 ships, `globals.css` still holds the old values: ink `#0a0a0a`, surface `#141414`, raised `#1c1c1c`, bone `#f2ede4`, muted `#a8a39a`, and `vermilion` `#f04e37` (renamed to `red` in Phase 5). Line stays `#3a3a3a`.
+
 | Token | Hex | Defined | Use |
 | --- | --- | --- | --- |
-| ink | `#0a0a0a` | `globals.css`, `--color-ink` | Page background (`globals.css`, `body` rule). Text on vermilion fills. |
-| surface | `#141414` | `globals.css`, `--color-surface` | Cards, cart drawer, order summary, notices. |
-| raised | `#1c1c1c` | `globals.css`, `--color-raised` | Input fill, hover fill. |
+| ink | `#1c1c1c` | `globals.css`, `--color-ink` | Page background (`globals.css`, `body` rule). Text on bone fills. |
+| surface | `#242424` | `globals.css`, `--color-surface` | Cards, cart drawer, order summary, notices. From Phase 6: the fill of outlined controls on the page (section 4, Tactile depth). |
+| raised | `#2c2c2c` | `globals.css`, `--color-raised` | Input fill, hover and pressed fill. From Phase 6: the fill of outlined controls inside the cart drawer. |
 | line | `#3a3a3a` | `globals.css`, `--color-line` | Dividers and decorative box edges. Never a control edge. |
-| bone | `#f2ede4` | `globals.css`, `--color-bone` | Text. Hover fill of the primary button (`page.tsx`, primary hero button). |
-| muted | `#a8a39a` | `globals.css`, `--color-muted` | Secondary text. Default border of a control. |
-| vermilion | `#f04e37` | `globals.css`, `--color-vermilion` | The one accent: fills, links, errors, focus ring. |
+| bone | `#ede6d8` | `globals.css`, `--color-bone` | Text. Selected fills. Hover fill of the primary button. The focus ring. |
+| muted | `#ada699` | `globals.css`, `--color-muted` | Secondary text, eyebrows. Default border of a control. |
+| red | `#b3261e` | `globals.css`, `--color-red` (was `--color-vermilion`) | The accent. Fills only, always with bone text. See the red budget below. |
+| error | `#f06a5f` | `globals.css`, `--color-error` (new) | Errors only: error text, error icon, invalid field border, error message border. |
 
-Measured WCAG contrast:
+Measured WCAG contrast (2026-11-21):
 
 | Pair | Ratio | Verdict |
 | --- | --- | --- |
-| bone on ink, surface, raised | 16.98, 15.80, 14.62 | Pass |
-| muted on ink, surface, raised | 7.89, 7.34, 6.79 | Pass |
-| vermilion on ink, surface, raised | 5.52, 5.13, 4.75 | Pass as text and as graphic |
-| ink on vermilion | 5.52 | Pass |
-| ink on bone | 16.98 | Pass |
-| bone on vermilion | 3.08 | Fail. Never use. |
-| line on ink, surface | 1.74, 1.62 | Dividers only |
+| bone on ink, surface, raised | 13.72, 12.50, 11.25 | Pass |
+| `text-bone/90` on ink | 11.32 | Pass |
+| muted on ink, surface, raised | 7.05, 6.42, 5.78 | Pass |
+| bone on red | 5.26 | Pass |
+| ink on bone | 13.72 | Pass |
+| error on ink, surface, raised | 5.63, 5.12, 4.61 | Pass as text and as graphic |
+| bone vs muted (selected vs unselected edge) | 1.95 | Not enough alone. Pair it with a width or fill change. |
+| red on ink, surface, raised | 2.61, 2.37, 2.14 | Fail. Never text, control border, focus ring or icon on a dark background. The one allowed mark is the current checkout step bar: decoration that carries no meaning alone (its step text and `aria-current` carry the state). |
+| ink on red | 2.61 | Fail. Never use. |
+| error on red | 2.16 | Fail. Never use. |
+| line on ink, surface | 1.50, 1.36 | Dividers only |
+| error on a grained panel (Phase 6, grain at 3.5%) | 4.80 (worst pixel, prototype, Chrome, 2026-11-21) | Pass. At 9% grain it was 4.29: fail. Section 4, Tactile depth. |
+| muted on a grained panel (Phase 6) | 5.94 (same test) | Pass |
+
+Red budget for the store (user decision, 2026-11-21). Red is a fill with bone text, and appears only here (the admin uses red only as its shadcn `--primary` fill, section 2.8):
+- The primary button (rest state).
+- The cart item count.
+- The current checkout step bar (the step text carries the state).
+- The skip link while focused.
+- Text selection (`::selection`: red fill, bone text).
+- The charm on the logo mark and the favicon (section 3.1).
+
+Everything that was vermilion on dark before Phase 5 changes as follows: the focus ring is bone, eyebrows are muted, link hover changes the underline (section 4 Button, Text link; nav links are the exception, section 4 Header), the secondary button hover fills with raised, a selected thumbnail edge is 2px bone, and errors use the `error` token.
 
 Rules:
 
-- A vermilion fill carries ink text. Never bone text.
-- A control border is `muted` by default, or `bone` for the secondary button. Both pass the 3:1 non-text rule (`CLAUDE.md:18`). Never `line`.
+- A red fill carries bone text. Never ink text.
+- A control border is `muted` by default, or `bone` for the secondary button. Both pass the 3:1 non-text rule (`CLAUDE.md:18`). Never `line`, never `red`.
 - `line` draws dividers, table rules and the edge of non-interactive boxes (inline messages, notices). It never draws the edge of a control.
-- An error uses vermilion, an icon and text. Never color alone.
+- An error uses the `error` token, an icon and text. Never color alone.
 - A selected chip or tab changes color (bone fill, ink text), not weight (`purchase-panel.tsx`, size chip `label`).
-- Text selection is vermilion with ink text (`globals.css`, `::selection` rule).
 - The store has no success or warning color. A success message uses bone text and an icon.
-- Photos get no vermilion tint.
-- Running text may use `text-bone/90` (about 13.7 on ink). Do not go lower.
+- Photos get no red tint.
+- Running text may use `text-bone/90` (11.32 on ink, 10.41 on surface). Do not go lower.
+- Copy from Phase 5: the word "vermilion" in store copy becomes "red". Two places: the Home hero paragraph (`page.tsx`, "one flame of vermilion") and About (`about/page.tsx`, "One flame of vermilion is the mark of the brand"). Nothing else in those sentences changes.
 
 ### 2.2 Type
 
@@ -64,11 +83,11 @@ Rules:
 | Display | Anton 400 | `display` utility: uppercase, 0.02em tracking, line height 1. Fallback: Impact, Arial Narrow Bold. | `globals.css`, `--font-display` and `display` utility; `layout.tsx`, `anton` font |
 | Body | Inter | Default body font. | `globals.css`, `--font-sans` and `body` rule; `layout.tsx`, `inter` font |
 | Japanese name | Noto Sans JP 500 | For `name_ja` only. Set `lang="ja"`. Fallback: Hiragino Sans, Yu Gothic. | `CLAUDE.md:43` |
-| Eyebrow | Inter 600 | `eyebrow` utility: 12px, uppercase, 0.2em tracking, vermilion. | `globals.css`, `eyebrow` utility |
+| Eyebrow | Inter 600 | `eyebrow` utility: 12px, uppercase, 0.2em tracking, muted (vermilion until Phase 5). | `globals.css`, `eyebrow` utility |
 | Group label | Inter 600 | Legend of a filter group or the size picker: same shape as the eyebrow, in muted. Form field labels are different (section 4, Form field). | `shop-view.tsx`, `FilterGroup` label |
 
-- Load Noto Sans JP with the Google Fonts `text=` parameter. The text is the glyphs of all `name_ja` values and nothing else: `狐鬼狸河童天狗鵺幽霊絡新婦木霊獏化け猫傘おば`. The Lantern hero (section 6.5) uses the same glyphs. `next/font/google` has no `text` option (options: Next.js docs, `node_modules/next/dist/docs/01-app/03-api-reference/02-components/font.md`, Reference section, options `src` to `declarations`). Use a `<link>` element.
-- Sizes: Tailwind default text sizes only. No arbitrary sizes.
+- Load Noto Sans JP with the Google Fonts `text=` parameter. The text is the glyphs of all `name_ja` values and nothing else: `狐鬼狸河童天狗鵺幽霊絡新婦木霊獏化け猫傘おば`. The Lantern hero (section 6.5) uses the same glyphs. From Phase 6, the parallax hero (section 6.6) uses 4 of them (鬼, 狐, 天狗, 河童), so the font request does not change. `next/font/google` has no `text` option (options: Next.js docs, `node_modules/next/dist/docs/01-app/03-api-reference/02-components/font.md`, Reference section, options `src` to `declarations`). Use a `<link>` element.
+- Sizes: Tailwind default text sizes only. No arbitrary sizes. One exception: the decorative hero kanji (Lantern, section 6.5; from Phase 6, section 6.6).
   - Page title: `display text-5xl sm:text-7xl` (`shop-view.tsx`, `h1`).
   - Section title: `display text-4xl sm:text-5xl` (`page.tsx`, Featured `h2`).
   - Sub-heading: `display text-3xl` (`shipping/page.tsx`, Shipping `h2`).
@@ -88,27 +107,43 @@ Rules:
 
 ### 2.4 Shape
 
-- The store has no rounded corners. No `rounded` class exists in `src/` today. Keep it that way.
+Approved by the user, 2026-11-21, for Phase 5. Until Phase 5 ships, the store has no rounded corners. Tailwind default steps only, no new tokens.
+
+| Role | Class | Elements |
+| --- | --- | --- |
+| Controls | `rounded-lg` (8px) | Buttons, text inputs, the sort select, filter and size chips, quantity stepper buttons, the cart button, the Menu button, the mobile order summary toggle, gallery thumbnails, the skip link, the "Sold out" badge |
+| Small images | `rounded-lg` (8px) | Cart line item images, order summary line images (`order-summary.tsx`, line image box; checkout and the confirmation page) |
+| Containers and large images | `rounded-xl` (12px) | Product card image box, category tiles, the gallery main image and its "No image yet" placeholder, the About page image, the order summary panel, Inline messages, the Shipping & Returns demo notice, the Empty state block (the `EmptyState` component and the Shop no-results block) |
+| Pills | `rounded-full` | The cart item count only |
+| Square (0) | none | Anything on a screen edge (header, footer, full-bleed Home hero, mobile menu panel), except the cart drawer from `sm` (next bullet). Also dividers and rules, the checkout step bar, the favicon square |
+
+- Cart drawer: square on the screen edge. From `sm`, where it is `max-w-md`, its two left corners are `rounded-l-xl`. Full width on phones: square.
+- An image box with a radius needs `overflow-hidden`, or the image corners stay square. The 1.05 hover scale stays inside the box.
+- The focus outline follows the radius (section 2.6). No change to the focus rule.
+- Why: the user found the square style weak and generic (2026-11-21). The scale is small so the store does not drift toward a generic rounded app look.
 - The admin keeps the shadcn default radius.
 
 ### 2.5 Motion
 
 | Use | Spec | Source |
 | --- | --- | --- |
-| Color change on hover and press | Tailwind default `transition-colors` (150ms). The pressed look starts at once (`active:duration-0`) and fades out over 150ms. | `page.tsx`, primary hero button |
+| Color change on hover and press | Tailwind default `transition-colors` (150ms). From Phase 6, raised controls use `transition` instead (section 4, Tactile depth). The pressed look starts at once (`active:duration-0`) and fades out over 150ms. | `page.tsx`, primary hero button |
 | Image hover | Scale 1.05, 500ms | `page.tsx`, category tile `Image`; `product-card.tsx`, card `Image` |
 | `animate-rise` | 0.7s. Only on the mobile menu. | `globals.css`, `animate-rise` utility; `site-nav.tsx`, `#mobile-menu` `<nav>` |
-| Lantern light | Pointer lag 120ms, idle drift after 3s at 70px/s. Section 6.5. | Not built yet |
-| Cart drawer | Slides in from the right, 250ms, `cubic-bezier(0.2, 0, 0, 1)`. Closes faster (200ms). | Not built yet |
+| Lantern light | Until Phase 6. Pointer lag 120ms, idle drift after 3s at 70px/s. Section 6.5. | `lantern.tsx` |
+| Cart drawer | Slides in from the right, 250ms, `cubic-bezier(0.2, 0, 0, 1)`. Closes faster (200ms). | `cart-drawer.tsx`, `animate-drawer-in` and `animate-drawer-out` |
+| Hero scroll drift | From Phase 6. Transform only, linked to scroll position, not to time. Photo 200px, kanji 60 to 140px, copy 0. Section 6.6. | Not built yet |
+| Hero pointer tilt | From Phase 6. Mouse only. At most 12px and 3°. Exponential lag, 120ms time constant. Section 6.6. | Not built yet |
+| Press sink | From Phase 6. A raised control moves 1px down at once and comes back over 150ms. Section 4, Tactile depth. | Not built yet |
 
-- Motion stays within the table above. Drawer, hover and menu motion is functional. The Lantern hero (section 6.5) is the only designed moment.
-- No parallax. No scroll reveals.
-- Under `prefers-reduced-motion: reduce`, animation and transition durations drop to 0.001ms and smooth scroll turns off (`globals.css`, `prefers-reduced-motion` media block).
+- Motion stays within the table above. Drawer, hover and menu motion is functional. Until Phase 6, the Lantern hero (section 6.5) is the only designed moment. From Phase 6, the parallax hero (section 6.6) replaces it.
+- No scroll reveals. No parallax, except the Home hero from Phase 6.
+- Under `prefers-reduced-motion: reduce`, animation and transition durations drop to 0.001ms and smooth scroll turns off (`globals.css`, `prefers-reduced-motion` media block). From Phase 6 it also stops the hero drift and tilt, and the press sink (sections 6.6 and 4, Tactile depth).
 
 ### 2.6 Focus
 
-- Every interactive element gets `:focus-visible`: a 2px vermilion outline with a 3px offset (`globals.css`, `:focus-visible` rule).
-- The ring passes because the outline sits outside the control, on the surface behind it: 5.52 on ink, 5.13 on surface, 4.75 on raised. This holds on a vermilion button too.
+- Every interactive element gets `:focus-visible`: a 2px bone outline with a 3px offset (`globals.css`, `:focus-visible` rule). Vermilion until Phase 5.
+- The ring passes because the outline sits outside the control, on the surface behind it: 13.72 on ink, 12.50 on surface, 11.25 on raised. This holds on a red button too.
 - A hidden radio draws the ring on its label (`purchase-panel.tsx`, size chip `label`).
 - The skip link shows on focus (`layout.tsx`, skip link).
 
@@ -122,20 +157,21 @@ Rules:
 ### 2.8 Admin theme
 
 - shadcn/ui, dark theme, neutral base.
-- `--primary` is `#f04e37`. `--primary-foreground` is `#0a0a0a`.
+- `--primary` is red `#b3261e`. `--primary-foreground` is bone `#ede6d8` (5.26:1). Until Phase 5: `#f04e37` with `#0a0a0a`.
 - Default shadcn radius. Lucide icons. Sonner toasts (`CLAUDE.md:63`).
 - The admin does not use the store components in section 4.
-- Admin errors and the Delete button use the stock shadcn `destructive` variant. The vermilion error rule (`CLAUDE.md:62`, Phase 2 store forms) is for the store only.
-- The admin overrides one token, inside the admin scope only: `--input` is muted `#a8a39a` (7.89:1 on ink, section 2.1), so control borders pass 3:1 (`CLAUDE.md:18`). The store tokens do not change. The Phase 3 builder measures the real border contrast after install.
+- The admin background stays the stock shadcn dark `--background` `#0a0a0a` (`admin.css`). Only `--primary`, `--primary-foreground` and `--input` change in Phase 5.
+- Admin errors and the Delete button use the stock shadcn `destructive` variant, unchanged. The store red budget does not apply to it. The store error rule (`error` token, section 2.1) is for the store only.
+- The admin overrides one token, inside the admin scope only: `--input` is muted `#ada699` from Phase 5 (8.19:1 on the admin background; `#a8a39a` until then), so control borders pass 3:1 (`CLAUDE.md:18`). The store tokens do not change. The Phase 3 builder measures the real border contrast after install.
 - Badges: order status (pending `secondary`, shipped `default`, cancelled `destructive`) and product status (Visible `secondary`, Hidden `outline`). Stock variants. The text carries the meaning.
 
 ## 3. Brand
 
 ### 3.1 Logo
 
-- Picked: sketch A, "Charm" (user decision, 2026-11-19). A blank geometric mask with one vermilion paper charm on the brow. Not a named yokai.
-- Colors: bone `#f2ede4` face, vermilion `#f04e37` charm. Flat fills. It reads at 16px.
-- **Mark** (`mark.svg`, viewBox 0 0 64 64, transparent background). Use it on ink or surface only. It is not for light backgrounds.
+- Picked: sketch A, "Charm" (user decision, 2026-11-19). A blank geometric mask with one red paper charm on the brow. Not a named yokai.
+- Colors from Phase 5: bone `#ede6d8` face, red `#b3261e` charm (bone `#f2ede4` and vermilion `#f04e37` until then). Flat fills. It reads at 16px. The charm sits on the bone face (red on bone 5.26), so it stays visible on the charcoal header. The favicon square becomes ink `#1c1c1c`. Files: `public/logo-mark.svg`, `src/app/icon.svg`.
+- **Mark** (`public/logo-mark.svg`, viewBox 0 0 64 64, transparent background). Use it on ink or surface only. It is not for light backgrounds.
 - **Favicon** (`icon.svg`): the mark on a full ink square, radius 0, so it stays visible in a light browser tab bar. Delete `src/app/favicon.ico`, or browsers keep showing the old mask.
 - **Wordmark**: live text "YOKAI APPAREL" in the `display` utility (Anton). It is not an image, because an SVG image cannot load the web font.
 - **Lockup** (header): the mark at 32px (`h-8 w-8`), then the wordmark (`site-header.tsx`, logo `Link`). Approved by the user, 2026-11-20, for the Phase 3 batch:
@@ -157,7 +193,7 @@ Rules:
 
 - Two images per product: front, plus back or detail.
 - Aspect 4:5 (`product-card.tsx`, image box; `gallery.tsx`, main image box). Garment centered on a dark seamless background. Same light in every shot.
-- Lifestyle photos (Home, About) are black and white. No vermilion tint on any photo.
+- Lifestyle photos (Home, About) are black and white. No red tint on any photo.
 - Licensed photos come first. If none fits, use an AI-generated image in the same direction and mark it "AI-generated" on the Credits page (`CLAUDE.md:19`).
 - Product images in the grid are decorative (`alt=""`, `product-card.tsx`, card `Image`). The gallery image carries real alt text (`catalog.ts`, `ProductImage` type).
 
@@ -175,7 +211,8 @@ The store builds these components and no others. Each entry gives the key rules.
 ### Header
 - Sticky, 64px, `border-b border-line`, `bg-ink/95` with blur (`site-header.tsx`, `<header>` element).
 - Desktop: logo left, links center (Shop, Tees, Hoodies, Accessories, About), cart with item count right. Mobile: Menu button, logo, cart.
-- Links: `text-sm font-semibold uppercase tracking-widest`. The current page is vermilion and has `aria-current="page"` (`site-nav.tsx`, `linkClass` and the `aria-current` prop on the mobile and desktop links).
+- Links: `text-sm font-semibold uppercase tracking-widest`. The current page has `aria-current="page"` (`site-nav.tsx`, `linkClass` and the `aria-current` prop on the mobile and desktop links).
+- From Phase 5: links are muted. Hover and press: bone, no underline (the underline marks only the current page). The current page: bone with a 2px underline (`underline decoration-2 underline-offset-8`), so it does not rely on color alone. Until Phase 5: bone, hover and current vermilion.
 - The cart is a button with a Phosphor cart icon and the count. Its name reads "Cart, 2 items". It opens the cart drawer.
 
 ### Mobile menu
@@ -187,22 +224,65 @@ The store builds these components and no others. Each entry gives the key rules.
 ### Footer
 - Keep the wordmark and tagline block (`site-footer.tsx`, first `div` of the footer row).
 - Links in order: About, Shipping & Returns, Image credits. No "Shop all". Then the demo-store line (`site-footer.tsx`, `FOOTER_LINKS` and the demo-store `<p>`).
-- `border-t border-line`. Links are `text-sm`, `min-h-11`, hover vermilion (`site-footer.tsx`, footer link `Link`).
+- `border-t border-line`. Links are `text-sm`, `min-h-11` (`site-footer.tsx`, footer link `Link`). From Phase 5: muted, hover and press bone with an underline. Until then: bone, hover vermilion.
 
 ### Demo notices
 - Footer line: "Demo store. No real orders or payments." in `text-sm text-muted` (`site-footer.tsx`, demo-store `<p>`).
 - Payment banner: "Demo store: no real payment is taken". It sits at the top of the Payment step, always visible, not dismissible. It uses the info Inline message.
 
 ### Button
-- Primary: `bg-vermilion text-ink`, hover `bg-bone` (`page.tsx`, primary hero button). Secondary: `border border-bone text-bone`, hover `border-vermilion text-vermilion` (`page.tsx`, secondary hero button).
-- Both use `display text-lg`, `min-h-12`, `px-8`, radius 0. A full-width button uses `min-h-14 text-xl` (`purchase-panel.tsx`, Add to cart button).
-- Text link: bone, underlined, offset 4px, hover vermilion (`purchase-panel.tsx`, Shipping & Returns link).
-- Pressed (approved by the user, 2026-11-20, Phase 3 brief): every store control that has a hover look shows the same look on `active:` too. Reason: Tailwind v4 applies `hover:` only on devices that have hover, so on a phone a tap gave no feedback. Primary: bone fill. Secondary: vermilion border and text. Text links and footer links: vermilion. Menu, cart and quantity buttons, and the sort select: bone border. The pressed look starts at once (`active:duration-0`) and fades out over 150ms (section 2.5). No scale, no other motion. Chips have their own pressed look (Size picker, Filter bar). A busy or disabled control shows no pressed look. All these color pairs are already checked in section 2.1.
-- Busy: the label changes ("Adding...", "Processing..."). The button has `aria-disabled="true"` and ignores presses. It keeps its full colors: no `opacity` change, because the busy label is the only progress signal and must stay readable (ink on vermilion at 70% opacity is 3.18:1). Do not use native `disabled` while busy: it drops keyboard focus. Show a busy label only while real work is pending. No artificial delay.
+- Primary from Phase 5: `bg-red text-bone`, hover and press `bg-bone text-ink` (`page.tsx`, primary hero button). Secondary from Phase 5: `border border-bone text-bone`, hover and press `bg-raised` (`page.tsx`, secondary hero button). Until Phase 5: primary `bg-vermilion text-ink`, hover `bg-bone`; secondary hover `border-vermilion text-vermilion`.
+- Both use `display text-lg`, `min-h-12`, `px-8`, `rounded-lg` from Phase 5 (section 2.4). A full-width button uses `min-h-14 text-xl` (`purchase-panel.tsx`, Add to cart button).
+- Text link: bone, underlined, offset 4px (`purchase-panel.tsx`, Shipping & Returns link). From Phase 5, hover and press thicken the underline (`decoration-2`). Until then: hover vermilion. The same applies to every link that turned vermilion on hover (Credits links, the cart "Remove" link, order and checkout links). A link with no underline at rest (breadcrumbs on the product page, "View all" on Home) turns bone and gains an underline on hover and press.
+- Pressed (approved by the user, 2026-11-20, Phase 3 brief): every store control that has a hover look shows the same look on `active:` too. Reason: Tailwind v4 applies `hover:` only on devices that have hover, so on a phone a tap gave no feedback. Primary: bone fill. Secondary: raised fill (vermilion border and text until Phase 5). Text links: thicker underline; nav and footer links: bone with underline (vermilion until Phase 5). Menu, cart and quantity buttons, and the sort select: bone border. The pressed look starts at once (`active:duration-0`) and fades out over 150ms (section 2.5). No scale, no other motion until Phase 6. From Phase 6, a raised control also sinks 1px and loses its shadow (section 4, Tactile depth). Chips have their own pressed look (Size picker, Filter bar). A busy or disabled control shows no pressed look. All these color pairs are already checked in section 2.1.
+- Busy: the label changes ("Adding...", "Processing..."). The button has `aria-disabled="true"` and ignores presses. It keeps its full colors: no `opacity` change, because the busy label is the only progress signal and must stay readable (measured on the old palette: ink on vermilion at 70% opacity was 3.18:1). Do not use native `disabled` while busy: it drops keyboard focus. Show a busy label only while real work is pending. No artificial delay.
+
+### Tactile depth (Phase 6)
+Approved by the user, 2026-11-21, from the prototype in section 6.6. Until Phase 6 the store is flat.
+
+Three looks: raised controls, recessed inputs and grained panels. Photos and text links stay flat. The admin keeps its shadcn look.
+
+**Values.** Add them to `globals.css` as utilities (for example `tactile`, `recessed`, `grain-panel`). Colors come from the tokens (`color-mix` with `--color-bone`, as the Lantern CSS did). Two exceptions, both only in these utilities: shadows use black, and the top highlight on a bone fill uses white (bone on bone does not show).
+
+| Look | Rule |
+| --- | --- |
+| Raised | `box-shadow`: an inset top highlight `inset 0 1px 0 <highlight>`, then `0 1px 1px` black at 28%, then `0 4px 10px -2px` black at 42%. The highlight is bone at 8%. On a red fill: bone at 22%. On a bone fill (selected chip, primary button on hover and press): white at 60%. |
+| Raised, pressed | `translateY(1px)` and no shadow. It starts at once (`active:duration-0`) and comes back over 150ms. Not on a disabled, `aria-disabled` or sold-out control. |
+| Recessed | `box-shadow: inset 0 2px 3px` black at 38%, then `0 1px 0` bone at 5%. No press sink. |
+| Grained panel | `bg-surface` plus a grain tile: SVG `feTurbulence` fractal noise, grayscale, 160px tile, at 3.5% opacity, as a data URI background. Plus the raised top highlight (bone at 8%). No outer shadow. |
+
+- Grain on a panel is at most 3.5%. It lifts the background under the text. At 9%, error text on a panel fell to 4.29:1 (prototype, measured). At 3.5% it is 4.80:1 (section 2.1).
+- Raised controls use Tailwind `transition` (colors, shadow and transform), not `transition-colors`. `active:duration-0` stays.
+- Reduced motion: no press sink. The shadow change on press stays. The global reduced-motion block only cuts durations, so the sink needs its own guard (`motion-safe:` or a `prefers-reduced-motion: reduce` rule that sets `transform: none`).
+- A busy button (`aria-disabled`, full colors) keeps its shadow and does not sink. A disabled control (stepper at its limit, sold-out size chip) has no shadow, no top highlight and no sink. Its fill and border stay.
+- The focus ring does not change (section 2.6).
+- Gallery thumbnails are buttons, but the photo fills them, so they follow the photo rule and stay flat.
+
+**Test** (Phase 6). At 375, 768, 1280 and 1440px. Pass or fail each:
+1. Every element in the table below has its look. Report any store control the table misses.
+2. Press each raised control: it moves 1px down with no shadow, and comes back. A busy, disabled or sold-out control does not move.
+3. Reduced motion: no control moves on press.
+4. Text contrast on every grained panel, from pixels: error text at least 4.5:1, muted text at least 4.5:1.
+5. Non-text contrast: every control border at least 3:1 against its fill and against the background around it.
+6. Keyboard: the focus ring shows in full on every raised control (the shadow does not hide it).
+
+**Fill.** An outlined control gets a fill, so its depth shows. On the page: `bg-surface`. Inside the cart drawer, which is `bg-surface`: `bg-raised`. Hover and pressed looks stay as in section 4 (the secondary button still goes to `bg-raised`).
+
+**Where each look goes.** From a grep of the store code, 2026-11-21. The builder greps again and reports any element of these kinds that the table misses.
+
+| Look | Elements |
+| --- | --- |
+| Raised, red fill | Every primary button: `page.tsx` hero "Shop all"; `about/page.tsx` "Browse the shop"; `purchase-panel.tsx` Add to cart; `cart-drawer.tsx` Checkout; `checkout-view.tsx` "Continue to payment" and the pay button; `empty-state.tsx` button; `not-found-content.tsx` primary link; `shop-view.tsx` no-results button |
+| Raised, `bg-surface` fill | Secondary buttons (`page.tsx` "Our story", `not-found-content.tsx` secondary link); `cart-button.tsx`; `site-nav.tsx` Menu button; `checkout-view.tsx` mobile order summary toggle (already `bg-surface`); `shop-controls.tsx` sort `<select>` (was `bg-ink`); unselected chips in `shop-view.tsx` `Chip`, `shop-controls.tsx` size chips and `purchase-panel.tsx` size chips |
+| Raised, `bg-raised` fill | Inside the cart drawer: `cart-drawer.tsx` Close button and the `quantity-stepper.tsx` buttons (the stepper is used only in the drawer) |
+| Raised, bone fill | Selected chips (the three chip kinds above) |
+| Recessed | `form-field.tsx` input (every shipping and card field) |
+| Grained panel | `checkout-view.tsx` order summary panel; `order/[id]/page.tsx` order summary panel; `inline-message.tsx` |
+| Flat | Text links, nav and footer links, breadcrumbs, the "Edit" and "Remove" links, the skip link, the cart count, gallery thumbnails (photos), product cards, category tiles, the cart drawer itself, the Empty state block and the Shipping demo notice (no fill) |
 
 ### Product card
 - One link wraps the card (`product-card.tsx`, card `Link`). One 4:5 image (`product-card.tsx`, image box). No hover image swap.
-- Under the image: English name (`display text-lg`, hover vermilion) with the price on the right (`text-sm font-semibold`, bone). Then the Japanese name, small and muted.
+- Under the image: English name (`display text-lg`; from Phase 5 it stays bone and gains an underline on card hover and press; vermilion until then) with the price on the right (`text-sm font-semibold`, bone). Then the Japanese name, small and muted.
 - Image hover: scale 1.05 over 500ms (`product-card.tsx`, card `Image`).
 - All sizes sold out: the "Sold out" badge shows on the image (`product-card.tsx`, "Sold out" badge). The card stays a link.
 
@@ -215,7 +295,7 @@ The store builds these components and no others. Each entry gives the key rules.
 - Category: links, one per category page, so each filter result has its own address. The current one has `aria-current="page"`.
 - Size: a native radio group, drawn as chips like the size picker. Sort: a native `<select>`. State stays in the URL (`catalog.ts`, `shopHref`).
 - Chips and the select have `min-h-11` and a muted border. A selected chip has a bone fill and ink text.
-- Pressed chip (not selected): `active:bg-raised active:border-bone` (bone on raised 14.62:1). A selected chip keeps its selected look when pressed. Timing as in section 4 Button, Pressed.
+- Pressed chip (not selected): `active:bg-raised active:border-bone` (bone on raised 11.25:1 from Phase 5). A selected chip keeps its selected look when pressed. Timing as in section 4 Button, Pressed.
 - The bar sits between two `border-line` rules (`shop-view.tsx`, filter bar `div`). The result count below uses `role="status"` (`shop-view.tsx`, result count `<p>`).
 
 ### Size picker
@@ -227,25 +307,26 @@ The store builds these components and no others. Each entry gives the key rules.
 
 ### Gallery thumbnails
 - Shown only when a product has more than one image. A 4-column grid under the main image (`gallery.tsx`, thumbnail `button`). Each thumbnail is a button with `aria-pressed` and a name such as "Show image 2 of 2".
-- Unselected: a 1px `border-muted` (about 7:1 on ink). Hover and pressed: `border-bone`, timing as in section 4 Button, Pressed.
-- Selected: a 2px `border-vermilion`. It keeps its look on hover and press.
-- Why the width change: muted and vermilion differ only by color (about 1.4:1 to each other). The thicker border shows the selected state without color alone.
+- Unselected: a 1px `border-muted` (7.05:1 on ink from Phase 5). Hover and pressed: `border-bone`, timing as in section 4 Button, Pressed.
+- Selected: a 2px `border-bone` from Phase 5 (`border-vermilion` until then). It keeps its look on hover and press.
+- Why the width change: muted and bone differ by 1.95:1 (muted and vermilion by about 1.4:1), not enough alone. The thicker border shows the selected state without color alone.
+- The box keeps its size (border-box). The selected photo sits 1px further in. That is expected.
 
 ### Quantity stepper
 - A minus button, the number, a plus button. Buttons are 44px square, muted border, Phosphor icons at 20px. Each button has a name, for example "Decrease quantity of Kitsune Tee".
 - Minimum 1. At 1 the minus button is disabled. Remove is a separate action. Maximum is the stock of that size. At the maximum the plus button is disabled.
 
 ### Cart drawer and cart line item
-- Radix Dialog with focus trap. Slides in from the right (section 2.5). `bg-surface`, `border-l border-line`, radius 0. Full width on phones, `max-w-md` from `sm`.
+- Radix Dialog with focus trap. Slides in from the right (section 2.5). `bg-surface`, `border-l border-line`. Full width on phones, `max-w-md` from `sm`. Corners: section 2.4 (square until Phase 5, then `rounded-l-xl` from `sm`).
 - "Add to cart" opens it and shows the added item. The title "Cart" uses `display`. A close button with an icon and a name sits at the top right. Escape closes it.
 - Line item: small 4:5 image, English name, size, unit price, quantity stepper, a "Remove" text link, line total.
 - Footer: subtotal, one muted line "$X.XX away from free shipping" (free at $100.00 or more; at or above it the line reads "Free shipping"), a full-width primary "Checkout" button. An empty cart shows the Empty state.
 
 ### Form field
-- Label above the field (`text-sm font-semibold`). Input `min-h-12`, `bg-raised`, muted border, bone text, radius 0. Hover: bone border.
+- Label above the field (`text-sm font-semibold`). Input `min-h-12`, `bg-raised`, muted border, bone text, `rounded-lg` from Phase 5 (section 2.4). Hover: bone border.
 - Help text sits under the input in `text-sm text-muted`. The error sits under the help text.
-- Check on blur. An invalid field gets a vermilion border, `aria-invalid="true"` and `aria-describedby` for the help and error ids. After the first error, check again on each change.
-- Error = Phosphor warning icon (20px) + text, both vermilion, `text-sm`. No summary box. On submit, focus moves to the first invalid field.
+- Check on blur. An invalid field gets an `error` border (vermilion until Phase 5), `aria-invalid="true"` and `aria-describedby` for the help and error ids. After the first error, check again on each change.
+- Error = Phosphor warning icon (20px) + text, both `text-error` (vermilion until Phase 5), `text-sm`. No summary box. On submit, focus moves to the first invalid field.
 - Use the right `type` and `autocomplete` value on every shipping field: `name`, `email` (`type="email"`), `address-line1`, `address-line2`, `address-level2` (city), `postal-code` (`inputmode="numeric"`).
 
 ### Card payment form
@@ -259,12 +340,12 @@ The store builds these components and no others. Each entry gives the key rules.
 - Desktop: a `surface` panel, sticky in the right column. Mobile: collapsed at the top, shows the total, opens as a disclosure.
 
 ### Checkout step indicator
-- An ordered list with two steps: 1 Shipping, 2 Payment. The current step has `aria-current="step"`, bone text and a vermilion bar.
+- An ordered list with two steps: 1 Shipping, 2 Payment. The current step has `aria-current="step"`, bone text and a red bar (vermilion until Phase 5).
 - A locked Payment step is muted and shows a lock icon plus the word "Locked". A finished step shows a check icon.
 
 ### Inline message
 - Three kinds: error, success, info. Each has an icon (20px) and text. The icon and text carry the kind, not color alone.
-- Error: vermilion text and icon, vermilion border. Success and info: bone text, `border-line`. Box: `bg-surface`, `p-4`, radius 0.
+- Error: `error` text, icon and border (vermilion until Phase 5). Success and info: bone text, `border-line`. Box: `bg-surface`, `p-4`, `rounded-xl` from Phase 5 (section 2.4). From Phase 6 it is a grained panel (section 4, Tactile depth).
 - Errors that appear after a submit use `role="alert"`.
 
 ### Empty state
@@ -273,7 +354,7 @@ The store builds these components and no others. Each entry gives the key rules.
 
 ### Prose block
 - Max width `max-w-prose` (65ch). Text `text-bone/90`. `space-y-6` between paragraphs (`about/page.tsx`, body text `div`).
-- Sub-headings use `display text-3xl`. Links are bone, underlined, hover vermilion (`credits/page.tsx`, Unsplash License link).
+- Sub-headings use `display text-3xl`. Links are bone, underlined, hover thicker underline from Phase 5 (vermilion until then) (`credits/page.tsx`, Unsplash License link).
 - Used on About, Shipping & Returns and Image credits.
 
 ### Badges
@@ -444,7 +525,7 @@ Regions, top to bottom on mobile. The desktop position is in each item.
    - The panel has no link or button, so it adds no tab stop on desktop. The cart drawer is the only place to change the cart.
    - Money rules: tax is 7.25% of the subtotal. Shipping has no tax. Round the tax to whole cents, half up: `tax_cents = floor((subtotal_cents * 725 + 5000) / 10000)`. The server computes every amount. The browser shows the same numbers.
 3. **Step indicator.** Component: Checkout step indicator. It is the first item in the main column, above the steps. Two equal items.
-   - Current: `aria-current="step"`, bone text, vermilion bar (4px, top edge).
+   - Current: `aria-current="step"`, bone text, red bar (4px, top edge; vermilion until Phase 5).
    - Finished: check icon with hidden text "Done", bone text, bone bar.
    - Locked: muted text, lock icon, the word "Locked", `line` bar.
    - Text style: `text-sm font-semibold uppercase tracking-widest` (the header link style).
@@ -608,7 +689,7 @@ Regions:
 
 ### 6.5 Home hero: Lantern
 
-Status: **Approved by the user, 2026-11-20.** Phase 2 brief, last task. Prototype: https://claude.ai/artifact/TT8pXkh2CXRnUUjMJbtgsj. This replaces the earlier hero motion decision (rise-in) and the vertical 妖怪.
+Status: **Approved by the user, 2026-11-20.** Phase 2 brief, last task. Prototype: https://claude.ai/artifact/TT8pXkh2CXRnUUjMJbtgsj. This replaces the earlier hero motion decision (rise-in) and the vertical 妖怪. **Phase 6 replaces the Lantern with section 6.6 and deletes its code.** This section stays valid until then.
 
 The idea: the street photo is dark at rest. A soft light circle moves over it. Inside the circle the photo is brighter and the 12 yokai names show in kanji. The light never reaches the text block.
 
@@ -638,7 +719,7 @@ Layers 3 and 5 are `aria-hidden="true"` and `pointer-events: none`. They hold no
 - Measured in the prototype: the brightest pixel behind the text is never brighter than today. At 375px the paragraph contrast goes from 4.60 today to 12.61.
 
 **Light.**
-- Diameter 160px, 120px below `sm`. Neutral: a `bone` wash only. No vermilion, no flicker.
+- Diameter 160px, 120px below `sm`. Neutral: a `bone` wash only. No red or vermilion, no flicker.
 - Position: two custom properties on the section, `--lx` and `--ly`. Their CSS default is the first kanji (鬼), so the first frame shows a lit name before JS runs.
 
 **Kanji.** Noto Sans JP 500, `writing-mode: vertical-rl`, `bone`, `lang="ja"`. Under each one, the romaji: 10px, Inter 600, uppercase, 0.14em tracking, `muted`. Each kanji has a soft `ink` text shadow. Positions are percentages of the hero, at the center of each name.
@@ -687,6 +768,81 @@ Layers 3 and 5 are `aria-hidden="true"` and `pointer-events: none`. They hold no
 5. Reduced motion: one still frame.
 6. Screen reader: the hero reads the eyebrow, headline, paragraph and two links only.
 7. The photo loads once (Network panel), with the same priority as today.
+
+### 6.6 Home hero: layered parallax (Phase 6)
+
+Status: **Approved by the user, 2026-11-21.** Phase 6 brief. Prototype: https://claude.ai/artifact/KbWEawesbFdc8ChFFZ8Vpv (version 2). It replaces the Lantern (section 6.5).
+
+The idea: the hero has depth. When the page scrolls, the photo moves slowest, the kanji move faster and the copy scrolls normally. With a mouse, the photo and the kanji also tilt a little toward the pointer. Without the motion, the hero is a complete still image.
+
+**Keep (`page.tsx`, hero `<section>`).** The section box (`relative isolate flex min-h-[34rem] items-end overflow-hidden md:min-h-[42rem]`), the `wrap` padding (`pb-14 pt-32 md:pb-20`), the eyebrow, the headline, the paragraph, both buttons, their links and all strings.
+
+**Remove.**
+- `lantern.tsx`, its import and the `<Lantern />` element (`page.tsx`).
+- The Lantern block in `globals.css` (`.lantern` and every `.lamp-*` rule, with their media queries).
+- `data-lantern` and the `lantern` class on the section.
+- The one-cell grid on the `wrap` (`grid grid-cols-[fit-content(100%)] justify-start`) and `col-start-1 row-start-1` on the text block. They existed only to protect the text from the light.
+- The `bg-ink/86` veil and the two gradient `div`s. The shade (layer 4) replaces them.
+- `unoptimized` on the hero `Image`. The Lantern needed it to reuse one cached file. Keep `priority`.
+- Update the Lantern comment in `layout.tsx` (Noto Sans JP glyphs). The glyph list does not change.
+
+**Layers, bottom to top.** Layers 1 to 4 are `aria-hidden="true"` and `pointer-events: none`. They hold no link and no focusable element.
+
+| # | Layer | Rule |
+| --- | --- | --- |
+| 1 | Grain | Full cover. The grain tile from section 4, Tactile depth, at 9% opacity, not the 3.5% panel limit: the shade (layer 4) lies over it under the copy, and the copy contrast was measured with it (worst 6.10:1). Static. |
+| 2 | Photo | `hero-dark-street.webp`, black and white, `object-cover`, object position 58% 50%, opacity 80%. Outer box: left, right and bottom 0, top -200px (room for the drift). Inner box: inset -32px (room for the tilt). The outer box drifts 200px, the inner box tilts. |
+| 3 | Kanji | 4 names (table below). Noto Sans JP 500, line height 1, `white-space: nowrap`, `user-select: none`, bone at 14%, `lang="ja"`. The layer box (inset 0) tilts. Each name drifts by its own distance. |
+| 4 | Shade | Gradients (below). Static. |
+| 5 | Copy | The text block. No movement. |
+
+| Name | Position | Size | Drift |
+| --- | --- | --- | --- |
+| 鬼 | right -2%, top -8% | `clamp(15rem, 34vw, 34rem)` | 110px |
+| 狐 | right 30%, bottom -14% | `clamp(9rem, 22vw, 22rem)` | 60px |
+| 天狗 | right 41%, top 4%, `writing-mode: vertical-rl` | `clamp(4rem, 8vw, 8rem)` | 140px |
+| 河童 | left 3%, top -3% | `clamp(4rem, 9vw, 9rem)` | 90px |
+
+- The kanji sizes are the one exception to "Tailwind default sizes only" (section 2.2), as in the Lantern: decorative art, hidden from screen readers. Do not change them without a new contrast check (test 2).
+- The kanji may sit behind the copy. The shade covers them there.
+
+**Shade.** All colors are ink at the given opacity (`color-mix` with `--color-ink`).
+- Below `md`: one gradient to bottom. 0% at 0, 30% at 4rem, 90% at 7.5rem, 95% at 9rem, 95% to the end. The copy fills the width on phones, so the photo shows only in the band above it.
+- From `md`: two gradients. To right: 94% at 0, 92% at 40rem, 0% at 70rem. To top: 85% at 0%, 0% at 35%.
+- Why: the copy sits on moving layers. With this shade, the worst text contrast over every layer position was 6.10:1 (eyebrow, 320px, prototype).
+
+**Scroll drift.**
+- CSS scroll-driven animation only. No scroll listener, no JS, no polyfill.
+- The section has `view-timeline: --hero block`. Each drifting box has `animation: <name> linear both`, `animation-timeline: --hero`, `animation-range: exit 0% exit 100%`. The keyframes end at `transform: translate3d(0, var(--shift), 0)`. Transform only. Each drifting box sets `--shift` to its drift distance: the photo outer box 200px, each kanji the value in the table.
+- All of this sits inside `@supports (animation-timeline: view())` and `@media (prefers-reduced-motion: no-preference)`. Without support, or with reduced motion, nothing moves and the hero is complete.
+- Support: Chrome and Edge 115, Safari 26, Firefox 159 (web.dev, 2026-10-29; MDN).
+- Do not rely on the global reduced-motion block (`globals.css`, durations cut to 0.001ms) to stop the drift. Keep the `no-preference` guard, and check it with test 4.
+
+**Pointer tilt.**
+- Only when `(pointer: fine)` matches and reduced motion is off. Mouse input only (`pointerType === "mouse"`).
+- Pointer position across the viewport, scaled to -1 to 1 on each axis and clamped to the unit circle. Target per layer: translate `-x * shift`, `-y * shift`, and a 2D `rotate(x * rot)` (z axis; pointer on the right turns the layer clockwise). Kanji layer: shift 12px, rot 3°. Photo inner box: shift 6px, rot 1.2°.
+- Smoothing: exponential, 120ms time constant, scaled by frame time, so it does not depend on the frame rate. The `requestAnimationFrame` loop stops when the layers settle and starts again on the next pointer move.
+- JS writes three custom properties per box (`--tx`, `--ty`, `--rot`). CSS reads them in `transform`. Drift and tilt are on different boxes, so they never write the same `transform`.
+- Pointer leaves the document: the layers go back to 0. Hero offscreen (`IntersectionObserver`): no frames.
+- If `(pointer: fine)` or reduced motion changes while the page is open: remove the listeners and reset the layers to 0.
+- `will-change: transform` only on the boxes that move.
+
+**Build.**
+- One small client component renders layers 1 to 4 and runs the tilt. The section and the copy stay in the Server Component. No library.
+- The hero CSS goes in `globals.css`, where the Lantern CSS was.
+- Remove every listener and observer, and cancel the frame, when the component unmounts.
+
+**Test.** 320, 375, 639, 640, 767, 768, 1023, 1024, 1280 and 1440px, with the sticky header on the page. Pass or fail each:
+1. No horizontal scroll.
+2. Text contrast over the moving layers, at scroll 0 and at the scroll position where the layers have moved most while the copy is still visible: eyebrow, paragraph and button labels at least 4.5:1, headline at least 3:1. Measure from pixels, not from tokens.
+3. Drift: at scroll 0 every layer has no transform. When the hero has scrolled out, the photo has moved 200px and each kanji its own distance. The copy never moves.
+4. Reduced motion: no animation, no transform after scroll or mouse moves. The hero is complete.
+5. No support (`@supports` false): still and complete.
+6. Tilt: at the four viewport corners, the kanji layer moves at most 12px and 3°, the photo at most 6px and 1.2°. Touch and pen: no tilt.
+7. Screen reader: the hero reads the eyebrow, the headline, the paragraph and two links only.
+8. The photo loads once, with `priority`.
+9. Frame rate while scrolling, CPU slowed 4x: report the average fps and the worst frame.
+10. Console: no errors or warnings.
 
 ## 7. Admin page layouts
 
@@ -1159,7 +1315,7 @@ Regions, top to bottom:
 #### Not found (Phase 5)
 
 - An unknown admin id (`/admin/orders/<id>`, `/admin/products/<id>`) shows a page inside the admin shell, not the store 404. It happens often: the nightly reset deletes rows that an open admin tab may still show.
-- Stock shadcn. Heading (`h1`): "Not found". Text: "This order or product does not exist. The nightly demo reset may have removed it." Button (default variant, a link): "Back to admin", to `/admin`.
+- Stock shadcn. Heading (`h1`): "Not found". Text: "This order or product does not exist. The nightly demo reset may have removed it." Button (default variant) with `asChild`, wrapping a `Link` to `/admin` (it redirects to the products list): "Back to admin". Same pattern as the "Add product" button (`admin/(shell)/products/page.tsx`).
 - Until Phase 5 ships it, the store 404 is accepted.
 
 #### Loading

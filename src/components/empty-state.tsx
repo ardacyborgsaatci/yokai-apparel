@@ -18,7 +18,7 @@ export function EmptyState({
   headingRef?: React.Ref<HTMLHeadingElement>;
 }) {
   return (
-    <div className="border border-line p-8">
+    <div className="rounded-xl border border-line p-8">
       <h2 ref={headingRef} tabIndex={-1} className="display text-3xl">
         {heading}
       </h2>
@@ -26,7 +26,7 @@ export function EmptyState({
       <Link
         href={actionHref}
         onClick={onAction}
-        className="display mt-6 inline-flex min-h-12 items-center bg-vermilion px-8 text-lg text-ink transition-colors hover:bg-bone active:bg-bone active:duration-0"
+        className="display mt-6 inline-flex min-h-12 items-center rounded-lg bg-red px-8 text-lg text-bone transition-colors hover:bg-bone hover:text-ink active:bg-bone active:text-ink active:duration-0"
       >
         {actionLabel}
       </Link>

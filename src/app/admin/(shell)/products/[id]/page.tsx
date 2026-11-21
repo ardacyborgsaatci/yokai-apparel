@@ -29,6 +29,13 @@ type ProductRow = {
   product_variants: { size: string; stock: number }[];
 };
 
+// One sample id, so the proxy can rewrite an unknown id to a prerendered 404
+// (see src/proxy.ts). "sample" is not a number: the page calls notFound() for
+// it at build time, before any session or database call. Real ids render on request.
+export function generateStaticParams() {
+  return [{ id: "sample" }];
+}
+
 export default async function EditProductPage({
   params,
 }: PageProps<"/admin/products/[id]">) {

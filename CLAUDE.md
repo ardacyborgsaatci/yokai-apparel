@@ -8,15 +8,15 @@ These decisions are settled (grilling session, 2026-11-19). Do not ask them agai
 - Portfolio prototype of a clothing store for **Yokai Apparel**. Not a real business.
 - Market: California only. English. USD.
 - Catalog: 12 products, 3 categories (Tees, Hoodies, Accessories). Clothing sizes XS to XL. Stock per size.
-- Style: dark, minimal Japanese-folklore streetwear. Black and off-white, one accent (vermilion). Bold type (Anton + Inter). Logo with a yokai mask mark.
+- Style: dark, minimal Japanese-folklore streetwear. Charcoal (#1C1C1C) and bone (#EDE6D8), with a touch of red (#B3261E, fills only). Bold type (Anton + Inter). Logo with a yokai mask mark.
 - Design spec: `DESIGN.md` (repo root), owned by the "Design System" session. It mirrors `src/app/globals.css`. Do not change color tokens in globals.css without that session.
 - One code writer: only this (build) session edits code. The design session writes `DESIGN.md` and the "Design additions" section of this file only, and sends other changes as messages.
 - Logo: delivered by the design session (original geometric mask, not a fox or cat). Claude writes all copy.
 - Japanese name: each product has `name_ja`, shown small and muted under the English name on card and product page. Values come from the design session with a cited folklore source. Never invent them.
-- Motion: the Lantern hero (DESIGN.md 6.5, Phase 2) is the only designed moment on Home. It replaces the hero reveal animation. The mobile menu keeps its reveal. Respect prefers-reduced-motion.
+- Motion: until Phase 6, the Lantern hero (DESIGN.md 6.5) is the only designed moment on Home. From Phase 6, the layered parallax hero (DESIGN.md 6.6) replaces it: scroll drift and mouse tilt on the Home hero only, plus a 1px press sink on raised controls (DESIGN.md section 4, Tactile depth). The mobile menu keeps its reveal. Respect prefers-reduced-motion.
 - Icons: Phosphor (`@phosphor-icons/react`, `/ssr` import in Server Components), regular weight, 20 or 24 px. No Lucide in the store.
 - Controls: borders on interactive controls must pass 3:1 non-text contrast (use border-muted, not border-line). Dividers may stay border-line.
-- Images: free-license only (Unsplash, Pexels), credited on a Credits page. 2 per product (front, plus back or detail). Art direction: 4:5 portrait, garment centered on dark seamless background, same light on every shot. Lifestyle photos (Home, About) in black and white. No vermilion tint on photos. If no matching licensed shot exists, use an AI-generated image in the same art direction, marked "AI-generated" on the Credits page. No random web images.
+- Images: free-license only (Unsplash, Pexels), credited on a Credits page. 2 per product (front, plus back or detail). Art direction: 4:5 portrait, garment centered on dark seamless background, same light on every shot. Lifestyle photos (Home, About) in black and white. No red tint on photos. If no matching licensed shot exists, use an AI-generated image in the same art direction, marked "AI-generated" on the Credits page. No random web images.
 - Known gap (2026-11-20): product photos are still the old Unsplash set (1 per product, light backgrounds). Canva free AI credits ran out; no free matching source found. Image source decided later. No paid credits without the user's approval.
 - Copy and humanizer (2026-11-20): run the `humanizer` skill on all store-facing copy and the README. Not on code comments or commit messages.
   - Folklore facts and prices stay unchanged; only the wording may change.
@@ -57,21 +57,22 @@ These decisions are settled (grilling session, 2026-11-19). Do not ask them agai
 
 ## Process
 
-- 5 phases. Each ends with a sub-agent review and a user check.
+- 6 phases. Each ends with a sub-agent review and a user check.
   1. Setup and store front: repo, schema, seed data, images, credits, logo, Home, Shop, Product, About, Shipping & Returns, Credits. First deploy.
      Then a fix pass for the design list: control borders, name_ja, motion, 2 images per product, Phosphor icons, new logo.
   2. Cart and checkout: drawer, shipping step, demo payment, stock check, order save, confirmation.
-     - Cart drawer: Radix Dialog (focus trap), brand styled, radius 0. "Add to cart" opens it and shows the added item. Quantity stepper, remove, subtotal, Checkout button, one line "$X.XX away from free shipping".
+     - Cart drawer: Radix Dialog (focus trap), brand styled, corners per DESIGN.md 2.4. "Add to cart" opens it and shows the added item. Quantity stepper, remove, subtotal, Checkout button, one line "$X.XX away from free shipping".
      - Checkout: one page, two steps. Payment unlocks when Shipping is valid; Shipping collapses to a summary with an "Edit" link. Desktop: sticky order summary in a right column. Mobile: order summary collapsed at top, shows the total.
-     - Forms: check each field on blur, error text under the field, on submit with errors move focus to the first bad field. No error summary box. Errors use vermilion + icon + text, never color alone.
+     - Forms: check each field on blur, error text under the field, on submit with errors move focus to the first bad field. No error summary box. Errors use the error color + icon + text, never color alone (DESIGN.md 2.1).
      - Busy states: no skeletons. Buttons show "Adding..." / "Processing..." only while real work is pending. Busy buttons use aria-disabled, keep focus and keep full color. Payment "Processing..." about 1.5 s, then confirmation. No toasts in the store. Admin uses shadcn Sonner toasts.
      - Phase 2 design source: DESIGN.md 6.1 to 6.4 (checkout layout, shipping fields, money rules, step bars, confirmation, edge states). Lantern hero (6.5) is the last Phase 2 task; cut it if the phase goes over budget.
   3. Admin: login, product CRUD with upload, orders list and detail with status changes.
      - Checkout rule added with the admin: a cart line whose product is deleted or hidden (is_active false) counts as sold out (DESIGN.md 6.4 flow and copy; name from the cart's own copy). Update place_order in the same step.
      - Phase 3 design source: DESIGN.md section 7 and 2.8, plus 3.1 header lockup fix, Credits rule and build notes 7.9. Phase 3 adds the 6 seed orders; the reset logic waits for Phase 4.
   4. Demo reset cron (deletes every row the seed does not list, plus all uploads, then writes the seed), then final review of all pages at all widths.
-  5. Polish: corner radius (8px controls, 12px containers), the garment rail hero (replaces the Lantern), new product images (3D renders made in three.js, 2 per product plus rail cut-outs), admin 404 (DESIGN.md 7.7). Ends with a review of all pages at all widths.
-     - Specs for the radius, the rail hero and the images come from the design session as one batch, after the user approves the prototype. That batch also brings new wording for the CLAUDE.md lines it affects.
+  5. Polish: the new palette (DESIGN.md 2.1), corner radius (8px controls, 12px containers), the garment rail hero (replaces the Lantern), new product images (3D renders made in three.js, 2 per product plus rail cut-outs), admin 404 (DESIGN.md 7.7). Ends with a review of all pages at all widths.
+     - The radius spec is in DESIGN.md 2.4. The rail hero and the new images are deferred (user, 2026-11-21); their specs come later from the design session, with new wording for the CLAUDE.md lines they affect (16, 19, 22, 68).
+  6. Depth: a layered parallax Home hero (replaces the Lantern) and soft tactile depth on controls and panels. Spec: DESIGN.md 6.6 and section 4, Tactile depth (approved by the user, 2026-11-21; prototype https://claude.ai/artifact/KbWEawesbFdc8ChFFZ8Vpv). After Phase 6, no new design directions until it ships (user, 2026-11-21).
 - Design freeze: once a phase's fix pass or build brief starts, new design items go to the next phase's brief. The running build does not change.
 - Builder sub-agents: Sonnet. Reviewer sub-agent: Haiku.
 - Test matrix for every page: 375, 768, 1280, 1440 px; WCAG AA contrast; keyboard navigation. Pass or fail per item.

@@ -67,6 +67,13 @@ const getOrder = cache(async (id: string): Promise<OrderRow | null> => {
   return data as OrderRow | null;
 });
 
+// One sample id, so the proxy can rewrite an unknown id to a prerendered 404
+// (see src/proxy.ts). "sample" is not a uuid: the page calls notFound() for it
+// at build time, before any session or database call. Real ids render on request.
+export function generateStaticParams() {
+  return [{ id: "sample" }];
+}
+
 export async function generateMetadata({
   params,
 }: PageProps<"/admin/orders/[id]">): Promise<Metadata> {

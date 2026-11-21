@@ -47,8 +47,8 @@
   --popover: #171717;
   --popover-foreground: #fafafa;
   /* DESIGN.md 2.8: the two brand overrides. */
-  --primary: #f04e37;
-  --primary-foreground: #0a0a0a;
+  --primary: #b3261e;
+  --primary-foreground: #ede6d8;
   --secondary: #262626;
   --secondary-foreground: #fafafa;
   --muted-foreground: #a1a1a1;
@@ -57,7 +57,7 @@
   --destructive: #ff6467;
   --border: rgb(255 255 255 / 0.1);
   /* DESIGN.md 2.8: control borders pass 3:1 (the store muted color). */
-  --input: #a8a39a;
+  --input: #ada699;
   --ring: #737373;
 }
 

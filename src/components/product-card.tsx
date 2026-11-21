@@ -13,7 +13,7 @@ export function ProductCard({
   const image = product.images[0];
   return (
     <Link href={`/products/${product.slug}`} className="group block">
-      <div className="relative aspect-[4/5] overflow-hidden bg-surface">
+      <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-surface">
         {image ? (
           <Image
             src={image.path}
@@ -25,13 +25,13 @@ export function ProductCard({
           />
         ) : null}
         {isSoldOut(product) && (
-          <span className="absolute left-3 top-3 bg-ink px-2 py-1 text-xs font-semibold uppercase tracking-widest text-bone">
+          <span className="absolute left-3 top-3 rounded-lg bg-ink px-2 py-1 text-xs font-semibold uppercase tracking-widest text-bone">
             Sold out
           </span>
         )}
       </div>
       <div className="mt-3 flex items-baseline justify-between gap-3">
-        <span className="display text-lg group-hover:text-vermilion group-active:text-vermilion">
+        <span className="display text-lg group-hover:underline group-active:underline">
           {product.name}
         </span>
         <span className="text-sm font-semibold text-bone">

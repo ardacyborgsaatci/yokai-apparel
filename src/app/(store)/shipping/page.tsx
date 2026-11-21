@@ -54,7 +54,7 @@ export default function ShippingPage() {
           </p>
         </section>
 
-        <p className="border border-line p-5 text-muted">
+        <p className="rounded-xl border border-line p-5 text-muted">
           This is a demo store. No real orders are placed, shipped or charged,
           and no returns are processed.
         </p>

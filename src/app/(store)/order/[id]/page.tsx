@@ -76,7 +76,7 @@ export default async function OrderPage({ params }: PageProps<"/order/[id]">) {
 
         <section
           aria-labelledby="summary-heading"
-          className="border border-line bg-surface p-4 lg:col-start-2 lg:row-span-5 lg:row-start-2 lg:self-start lg:p-6"
+          className="rounded-xl border border-line bg-surface p-4 lg:col-start-2 lg:row-span-5 lg:row-start-2 lg:self-start lg:p-6"
         >
           <h2 id="summary-heading" className="display mb-6 text-3xl">
             Order summary
@@ -104,7 +104,7 @@ export default async function OrderPage({ params }: PageProps<"/order/[id]">) {
         <div className="lg:col-start-1 lg:row-start-5">
           <Link
             href="/shop"
-            className="inline-flex min-h-11 items-center underline underline-offset-4 transition-colors hover:text-vermilion active:text-vermilion active:duration-0"
+            className="inline-flex min-h-11 items-center underline underline-offset-4 transition-colors hover:decoration-2 active:decoration-2 active:duration-0"
           >
             Continue shopping
           </Link>

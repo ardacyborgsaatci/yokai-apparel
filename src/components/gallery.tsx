@@ -10,7 +10,7 @@ export function Gallery({ images }: { images: ProductImage[] }) {
 
   if (!current) {
     return (
-      <div className="flex aspect-[4/5] items-center justify-center bg-surface text-muted">
+      <div className="flex aspect-[4/5] items-center justify-center rounded-xl bg-surface text-muted">
         No image yet
       </div>
     );
@@ -18,7 +18,7 @@ export function Gallery({ images }: { images: ProductImage[] }) {
 
   return (
     <div>
-      <div className="relative aspect-[4/5] overflow-hidden bg-surface">
+      <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-surface">
         <Image
           key={current.path}
           src={current.path}
@@ -38,9 +38,9 @@ export function Gallery({ images }: { images: ProductImage[] }) {
                 onClick={() => setIndex(i)}
                 aria-label={`Show image ${i + 1} of ${images.length}`}
                 aria-pressed={i === index}
-                className={`relative block aspect-[4/5] w-full overflow-hidden bg-surface ${
+                className={`relative block aspect-[4/5] w-full overflow-hidden rounded-lg bg-surface ${
                   i === index
-                    ? "border-2 border-vermilion"
+                    ? "border-2 border-bone"
                     : "border border-muted transition-colors hover:border-bone active:border-bone active:duration-0"
                 }`}
               >

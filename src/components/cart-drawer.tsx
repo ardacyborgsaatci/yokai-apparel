@@ -18,7 +18,7 @@ function LineItem({ line }: { line: CartLine }) {
     line.size === "One Size" ? line.name : `${line.name}, size ${line.size}`;
   return (
     <li className="flex gap-4 py-5">
-      <div className="relative aspect-[4/5] w-20 shrink-0 overflow-hidden bg-raised">
+      <div className="relative aspect-[4/5] w-20 shrink-0 overflow-hidden rounded-lg bg-raised">
         {line.image ? (
           <Image
             src={line.image}
@@ -49,7 +49,7 @@ function LineItem({ line }: { line: CartLine }) {
             type="button"
             aria-label={`Remove ${label}`}
             onClick={() => remove(line.slug, line.size)}
-            className="inline-flex min-h-11 items-center text-sm underline underline-offset-4 transition-colors hover:text-vermilion active:text-vermilion active:duration-0"
+            className="inline-flex min-h-11 items-center text-sm underline underline-offset-4 transition-colors hover:decoration-2 active:decoration-2 active:duration-0"
           >
             Remove
           </button>
@@ -103,7 +103,7 @@ export function CartDrawer() {
                 : document.getElementById("cart-button");
             target?.focus();
           }}
-          className="fixed inset-y-0 right-0 z-50 flex w-full flex-col border-l border-line bg-surface data-[state=closed]:animate-drawer-out data-[state=open]:animate-drawer-in sm:max-w-md"
+          className="fixed inset-y-0 right-0 z-50 flex w-full flex-col border-l border-line bg-surface data-[state=closed]:animate-drawer-out data-[state=open]:animate-drawer-in sm:max-w-md sm:rounded-l-xl"
         >
           <div className="flex items-center justify-between border-b border-line px-6 py-4">
             <Dialog.Title ref={titleRef} tabIndex={-1} className="display text-3xl">
@@ -111,7 +111,7 @@ export function CartDrawer() {
             </Dialog.Title>
             <Dialog.Close
               aria-label="Close cart"
-              className="inline-flex h-11 w-11 items-center justify-center border border-muted text-bone transition-colors hover:border-bone active:border-bone active:duration-0"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-muted text-bone transition-colors hover:border-bone active:border-bone active:duration-0"
             >
               <X size={20} aria-hidden="true" />
             </Dialog.Close>
@@ -150,7 +150,7 @@ export function CartDrawer() {
                 <Link
                   href="/checkout"
                   onClick={leave}
-                  className="display mt-5 flex min-h-14 w-full items-center justify-center bg-vermilion px-8 text-xl text-ink transition-colors hover:bg-bone active:bg-bone active:duration-0"
+                  className="display mt-5 flex min-h-14 w-full items-center justify-center rounded-lg bg-red px-8 text-xl text-bone transition-colors hover:bg-bone hover:text-ink active:bg-bone active:text-ink active:duration-0"
                 >
                   Checkout
                 </Link>

@@ -165,8 +165,8 @@ Approved by the user, 2026-11-21, for Phase 5. Until Phase 5 ships, the store ha
 - The admin overrides one token, inside the admin scope only: `--input` is muted `#ada699` from Phase 5 (8.19:1 on the admin background; `#a8a39a` until then), so control borders pass 3:1 (`CLAUDE.md:18`). The store tokens do not change. The Phase 3 builder measures the real border contrast after install.
 - Badges: order status (pending `secondary`, shipped `default`, cancelled `destructive`) and product status (Visible `secondary`, Hidden `outline`). Stock variants. The text carries the meaning.
 - Red in the admin is a fill only (user decision, 2026-11-22). Red on the admin background is 3.03:1 and on the card about 2.74:1, so it never carries text or a state mark alone:
-  - Button `link` variant: bone text (`text-foreground`) with an underline at rest, hover thicker underline. Was `text-primary` (red). Used by "All products" and "All orders".
-  - RadioGroup checked dot: bone (`fill-foreground`). Was `fill-primary`.
+  - Button `link` variant: foreground text (`text-foreground`, `#fafafa` in `admin.css`) with an underline at rest, hover thicker underline. Was `text-primary` (red). Used by the "All products" back link (new product and edit product pages) and the "All orders" back link.
+  - RadioGroup checked dot: foreground (`fill-foreground`, `#fafafa`). Was `fill-primary`.
   - Switch: stock. Its thumb position shows the state, so red is not the only mark.
 
 ## 3. Brand

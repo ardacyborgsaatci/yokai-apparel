@@ -8,7 +8,14 @@ import { Button } from "@/components/ui/button";
 import { CLOTHING_SIZES, ONE_SIZE } from "@/lib/catalog";
 import { requireAdmin } from "@/lib/supabase-server";
 
-export const metadata: Metadata = { title: "Edit product" };
+// The proxy rewrites every unknown product to the "sample" page, so a
+// non-number id means the 404.
+export async function generateMetadata({
+  params,
+}: PageProps<"/admin/products/[id]">): Promise<Metadata> {
+  const { id } = await params;
+  return { title: /^\d{1,15}$/.test(id) ? "Edit product" : "Not found" };
+}
 
 type ProductRow = {
   id: number;

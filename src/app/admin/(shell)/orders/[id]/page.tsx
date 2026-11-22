@@ -79,7 +79,7 @@ export async function generateMetadata({
 }: PageProps<"/admin/orders/[id]">): Promise<Metadata> {
   const { id } = await params;
   const order = await getOrder(id);
-  return { title: order ? `Order ${order.order_number}` : "Order not found" };
+  return { title: order ? `Order ${order.order_number}` : "Not found" };
 }
 
 export default async function OrderDetailPage({

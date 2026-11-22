@@ -164,6 +164,10 @@ Approved by the user, 2026-11-21, for Phase 5. Until Phase 5 ships, the store ha
 - Admin errors and the Delete button use the stock shadcn `destructive` variant, unchanged. The store red budget does not apply to it. The store error rule (`error` token, section 2.1) is for the store only.
 - The admin overrides one token, inside the admin scope only: `--input` is muted `#ada699` from Phase 5 (8.19:1 on the admin background; `#a8a39a` until then), so control borders pass 3:1 (`CLAUDE.md:18`). The store tokens do not change. The Phase 3 builder measures the real border contrast after install.
 - Badges: order status (pending `secondary`, shipped `default`, cancelled `destructive`) and product status (Visible `secondary`, Hidden `outline`). Stock variants. The text carries the meaning.
+- Red in the admin is a fill only (user decision, 2026-11-22). Red on the admin background is 3.03:1 and on the card about 2.74:1, so it never carries text or a state mark alone:
+  - Button `link` variant: bone text (`text-foreground`) with an underline at rest, hover thicker underline. Was `text-primary` (red). Used by "All products" and "All orders".
+  - RadioGroup checked dot: bone (`fill-foreground`). Was `fill-primary`.
+  - Switch: stock. Its thumb position shows the state, so red is not the only mark.
 
 ## 3. Brand
 
@@ -1316,6 +1320,7 @@ Regions, top to bottom:
 
 - An unknown admin id (`/admin/orders/<id>`, `/admin/products/<id>`) shows a page inside the admin shell, not the store 404. It happens often: the nightly reset deletes rows that an open admin tab may still show.
 - Stock shadcn. Heading (`h1`): "Not found". Text: "This order or product does not exist. The nightly demo reset may have removed it." Button (default variant) with `asChild`, wrapping a `Link` to `/admin` (it redirects to the products list): "Back to admin". Same pattern as the "Add product" button (`admin/(shell)/products/page.tsx`).
+- Tab title: "Not found | Yokai Apparel" for an unknown order and an unknown product (user decision, 2026-11-22).
 - Until Phase 5 ships it, the store 404 is accepted.
 
 #### Loading

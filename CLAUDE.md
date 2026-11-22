@@ -75,7 +75,17 @@ These decisions are settled (grilling session, 2026-11-19). Do not ask them agai
   6. Depth: a layered parallax Home hero (replaces the Lantern) and soft tactile depth on controls and panels. Spec: DESIGN.md 6.6 and section 4, Tactile depth (approved by the user, 2026-11-21; prototype https://claude.ai/artifact/KbWEawesbFdc8ChFFZ8Vpv). After Phase 6, no new design directions until it ships (user, 2026-11-21).
 - Design freeze: once a phase's fix pass or build brief starts, new design items go to the next phase's brief. The running build does not change.
 - Builder sub-agents: Sonnet. Reviewer sub-agent: Haiku.
-- Test matrix for every page: 375, 768, 1280, 1440 px; WCAG AA contrast; keyboard navigation. Pass or fail per item.
+- Test matrix: see the Test matrix section below.
+
+## Test matrix
+
+Run on every page. Report pass or fail per item. Tool: Playwright CLI.
+
+- Widths: 375, 768, 1280, 1440 px.
+- Keyboard navigation.
+- Text contrast (WCAG AA): inject axe-core from the CDN (`https://cdn.jsdelivr.net/npm/axe-core@4/axe.min.js`) and run `axe.run()` with the `color-contrast` rule at each width. Report the violation count and each failing selector. Zero violations is a pass.
+- Incomplete items: report each axe "incomplete" item (text on images or gradients) and check it by hand.
+- Control borders: check by hand that every interactive control's border (inputs, selects, size buttons, steppers) uses `border-muted`, not `border-line`, and reaches 3:1 against the background behind it. List each control with its border color and pass or fail.
 
 ## Working with other sessions
 

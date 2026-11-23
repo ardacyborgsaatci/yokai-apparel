@@ -111,7 +111,7 @@ export function CartDrawer() {
             </Dialog.Title>
             <Dialog.Close
               aria-label="Close cart"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-muted text-bone transition-colors hover:border-bone active:border-bone active:duration-0"
+              className="tactile inline-flex h-11 w-11 items-center justify-center rounded-lg border border-muted bg-raised text-bone transition hover:border-bone active:border-bone active:duration-0"
             >
               <X size={20} aria-hidden="true" />
             </Dialog.Close>
@@ -150,7 +150,7 @@ export function CartDrawer() {
                 <Link
                   href="/checkout"
                   onClick={leave}
-                  className="display mt-5 flex min-h-14 w-full items-center justify-center rounded-lg bg-red px-8 text-xl text-bone transition-colors hover:bg-bone hover:text-ink active:bg-bone active:text-ink active:duration-0"
+                  className="display mt-5 flex min-h-14 w-full items-center justify-center tactile tactile-red rounded-lg bg-red px-8 text-xl text-bone transition hover:bg-bone hover:text-ink hover:tactile-bone active:bg-bone active:text-ink active:tactile-bone active:duration-0"
                 >
                   Checkout
                 </Link>

@@ -44,7 +44,7 @@ export default function AboutPage() {
           <p>
             <Link
               href="/shop"
-              className="display inline-flex min-h-12 items-center rounded-lg bg-red px-8 text-lg text-bone transition-colors hover:bg-bone hover:text-ink active:bg-bone active:text-ink active:duration-0"
+              className="display inline-flex min-h-12 items-center tactile tactile-red rounded-lg bg-red px-8 text-lg text-bone transition hover:bg-bone hover:text-ink hover:tactile-bone active:bg-bone active:text-ink active:tactile-bone active:duration-0"
             >
               Browse the shop
             </Link>

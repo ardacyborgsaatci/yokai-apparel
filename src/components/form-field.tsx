@@ -56,7 +56,7 @@ export function FormField({
         onBlur={onBlur}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy}
-        className={`mt-2 block min-h-12 w-full rounded-lg border bg-raised px-4 text-base text-bone ${
+        className={`recessed mt-2 block min-h-12 w-full rounded-lg border bg-raised px-4 text-base text-bone ${
           error ? "border-error" : "border-muted hover:border-bone"
         }`}
       />

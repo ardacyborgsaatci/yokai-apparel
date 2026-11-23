@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Lantern } from "@/components/lantern";
+import { HeroLayers } from "@/components/hero-layers";
 import { ProductCard } from "@/components/product-card";
 import { filterProducts } from "@/lib/catalog";
 import { getStore } from "@/lib/store";
@@ -14,54 +14,31 @@ export default async function HomePage() {
 
   return (
     <>
-      <section
-        data-lantern=""
-        className="lantern relative isolate flex min-h-[34rem] items-end overflow-hidden md:min-h-[42rem]"
-      >
-        <Image
-          src="/images/hero-dark-street.webp"
-          alt=""
-          fill
-          priority
-          unoptimized
-          sizes="100vw"
-          className="-z-20 object-cover object-center"
-        />
-        <div aria-hidden="true" className="absolute inset-0 -z-16 bg-ink/86" />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/55 to-ink/10"
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 -z-10 bg-gradient-to-r from-ink/90 via-ink/60 to-transparent"
-        />
-        <div className="wrap grid grid-cols-[fit-content(100%)] justify-start pb-14 pt-32 md:pb-20">
-          <Lantern />
-          <div className="col-start-1 row-start-1">
-            <p className="eyebrow">Streetwear for the night</p>
-            <h1 className="display mt-4 text-6xl sm:text-8xl lg:text-9xl">
-              <span className="block">Wear the</span>{" "}
-              <span className="block">unseen</span>
-            </h1>
-            <p className="mt-6 max-w-md text-base text-bone/90 sm:text-lg">
-              Black, off-white and one flame of red. Tees, hoodies and
-              accessories named for the spirits of Japanese folklore.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                href="/shop"
-                className="display inline-flex min-h-12 items-center rounded-lg bg-red px-8 text-lg text-bone transition-colors hover:bg-bone hover:text-ink active:bg-bone active:text-ink active:duration-0"
-              >
-                Shop all
-              </Link>
-              <Link
-                href="/about"
-                className="display inline-flex min-h-12 items-center rounded-lg border border-bone px-8 text-lg text-bone transition-colors hover:bg-raised active:bg-raised active:duration-0"
-              >
-                Our story
-              </Link>
-            </div>
+      <section className="hero relative isolate flex min-h-[34rem] items-end overflow-hidden md:min-h-[42rem]">
+        <HeroLayers />
+        <div className="wrap relative pb-14 pt-32 md:pb-20">
+          <p className="eyebrow">Streetwear for the night</p>
+          <h1 className="display mt-4 text-6xl sm:text-8xl lg:text-9xl">
+            <span className="block">Wear the</span>{" "}
+            <span className="block">unseen</span>
+          </h1>
+          <p className="mt-6 max-w-md text-base text-bone/90 sm:text-lg">
+            Black, off-white and one flame of red. Tees, hoodies and
+            accessories named for the spirits of Japanese folklore.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              href="/shop"
+              className="display tactile tactile-red inline-flex min-h-12 items-center rounded-lg bg-red px-8 text-lg text-bone transition hover:bg-bone hover:text-ink hover:tactile-bone active:bg-bone active:text-ink active:tactile-bone active:duration-0"
+            >
+              Shop all
+            </Link>
+            <Link
+              href="/about"
+              className="display tactile inline-flex min-h-12 items-center rounded-lg border border-bone bg-surface px-8 text-lg text-bone transition hover:bg-raised active:bg-raised active:duration-0"
+            >
+              Our story
+            </Link>
           </div>
         </div>
       </section>

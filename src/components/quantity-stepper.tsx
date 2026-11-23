@@ -5,7 +5,7 @@ import { Minus, Plus } from "@phosphor-icons/react";
 // The limit buttons use aria-disabled, not disabled. A disabled button that has
 // focus drops focus to the page body, which would leave the cart drawer.
 const BUTTON =
-  "inline-flex h-11 w-11 items-center justify-center rounded-lg border border-muted text-bone transition-colors hover:border-bone active:border-bone active:duration-0 aria-disabled:cursor-not-allowed aria-disabled:border-muted/40 aria-disabled:text-bone/40 aria-disabled:hover:border-muted/40 aria-disabled:active:border-muted/40";
+  "tactile inline-flex h-11 w-11 items-center justify-center rounded-lg border border-muted bg-raised text-bone transition hover:border-bone active:border-bone active:duration-0 aria-disabled:cursor-not-allowed aria-disabled:shadow-none aria-disabled:border-muted/40 aria-disabled:text-bone/40 aria-disabled:hover:border-muted/40 aria-disabled:active:border-muted/40";
 
 // Minimum 1. Maximum is the stock of that size. Remove is a separate action.
 export function QuantityStepper({

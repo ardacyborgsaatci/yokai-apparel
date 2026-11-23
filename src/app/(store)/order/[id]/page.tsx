@@ -76,7 +76,7 @@ export default async function OrderPage({ params }: PageProps<"/order/[id]">) {
 
         <section
           aria-labelledby="summary-heading"
-          className="rounded-xl border border-line bg-surface p-4 lg:col-start-2 lg:row-span-5 lg:row-start-2 lg:self-start lg:p-6"
+          className="grain-panel rounded-xl border border-line p-4 lg:col-start-2 lg:row-span-5 lg:row-start-2 lg:self-start lg:p-6"
         >
           <h2 id="summary-heading" className="display mb-6 text-3xl">
             Order summary

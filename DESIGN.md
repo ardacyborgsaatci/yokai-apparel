@@ -201,6 +201,26 @@ Approved by the user, 2026-11-21, for Phase 5. Until Phase 5 ships, the store ha
 - Licensed photos come first. If none fits, use an AI-generated image in the same direction and mark it "AI-generated" on the Credits page (`CLAUDE.md:19`).
 - Product images in the grid are decorative (`alt=""`, `product-card.tsx`, card `Image`). The gallery image carries real alt text (`catalog.ts`, `ProductImage` type).
 
+#### Product image set (AI-generated, user decision 2026-11-23)
+
+No licensed set fits the art direction, and the three.js render prototype failed the user's check (2026-11-23). The new product images are AI-generated with FLUX.1-schnell (Apache 2.0) through the public Hugging Face Space. They replace the old Unsplash product photos after Phase 6.
+
+- Two images per product: a front shot, and a close-up detail (collar, cuff, hem or fabric).
+- Garments are plain. No print, no text, no kanji. The model cannot draw kanji reliably. The About page line "a name like Kitsune Tee describes the idea, not a print you can see" stays true.
+- One prompt template for every product. Only the garment words change. They come from the product description (color, garment, fit, collar or hood). The template and the per-product slots live in the generation log, and the Credits page names the model.
+- Size: generated at 1024 x 1280 (4:5).
+- Several tries per image. An image is kept only if it passes every item:
+  1. No label, tag, logo or text anywhere.
+  2. Front shots: one matte black hanger with a thin silver hook. No cord, no rail, no second hanger.
+  3. The garment is centered and fills about 70% of the frame height (front shots).
+  4. Background: plain seamless charcoal, no visible horizon or floor line, no color tint (check the background corners: Lab a* and b* within ±2).
+  5. Light: soft, from above and slightly left, the same direction in every front shot.
+  6. The garment matches its product description (color, garment type, hood or collar).
+  7. No anatomy or fabric errors: no extra sleeves, broken drawstrings or melted seams.
+- Allowed processing: crop, scale, and a levels or white-balance correction. No painting, no retouching of objects. If an image fails, generate again.
+- Credits: each image is marked "AI-generated" on the Credits page with the model name (`CLAUDE.md:19`).
+- Alt text describes the garment as shown, for example "White cotton t-shirt on a black hanger, front view".
+
 ### 3.4 Voice
 
 - Plain, short, dry.
@@ -282,7 +302,7 @@ Three looks: raised controls, recessed inputs and grained panels. Photos and tex
 | Raised, bone fill | Selected chips (the three chip kinds above) |
 | Recessed | `form-field.tsx` input (every shipping and card field) |
 | Grained panel | `checkout-view.tsx` order summary panel; `order/[id]/page.tsx` order summary panel; `inline-message.tsx` |
-| Flat | Text links, nav and footer links, breadcrumbs, the "Edit" and "Remove" links, the skip link, the cart count, gallery thumbnails (photos), product cards, category tiles, the cart drawer itself, the Empty state block and the Shipping demo notice (no fill) |
+| Flat | Text links, nav and footer links, breadcrumbs, the "Edit" and "Remove" links, the skip link, the cart count, gallery thumbnails (photos), product cards, category tiles, the cart drawer itself, the Empty state block and the Shipping demo notice (no fill), the "Sold out" badge (not a control) |
 
 ### Product card
 - One link wraps the card (`product-card.tsx`, card `Link`). One 4:5 image (`product-card.tsx`, image box). No hover image swap.
@@ -787,7 +807,7 @@ The idea: the hero has depth. When the page scrolls, the photo moves slowest, th
 - `data-lantern` and the `lantern` class on the section.
 - The one-cell grid on the `wrap` (`grid grid-cols-[fit-content(100%)] justify-start`) and `col-start-1 row-start-1` on the text block. They existed only to protect the text from the light.
 - The `bg-ink/86` veil and the two gradient `div`s. The shade (layer 4) replaces them.
-- `unoptimized` on the hero `Image`. The Lantern needed it to reuse one cached file. Keep `priority`.
+- `unoptimized` on the hero `Image`. The Lantern needed it to reuse one cached file. Load it early with `preload` (Next.js 16 deprecates `priority` in favor of `preload`: `node_modules/next/dist/docs/01-app/03-api-reference/02-components/image.md`, `priority` section).
 - Update the Lantern comment in `layout.tsx` (Noto Sans JP glyphs). The glyph list does not change.
 
 **Layers, bottom to top.** Layers 1 to 4 are `aria-hidden="true"` and `pointer-events: none`. They hold no link and no focusable element.
@@ -844,8 +864,8 @@ The idea: the hero has depth. When the page scrolls, the photo moves slowest, th
 5. No support (`@supports` false): still and complete.
 6. Tilt: at the four viewport corners, the kanji layer moves at most 12px and 3°, the photo at most 6px and 1.2°. Touch and pen: no tilt.
 7. Screen reader: the hero reads the eyebrow, the headline, the paragraph and two links only.
-8. The photo loads once, with `priority`.
-9. Frame rate while scrolling, CPU slowed 4x: report the average fps and the worst frame.
+8. The photo loads once, preloaded (`preload`).
+9. Frame rate while scrolling and while moving the mouse, CPU slowed 4x: average at least 30 fps. Report the average and the worst frame.
 10. Console: no errors or warnings.
 
 ## 7. Admin page layouts

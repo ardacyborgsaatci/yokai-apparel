@@ -15,7 +15,7 @@ export function CartButton({ className = "" }: { className?: string }) {
       aria-label={name}
       aria-haspopup="dialog"
       onClick={(event) => openDrawer(event.currentTarget)}
-      className={`relative inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-muted text-bone transition-colors hover:border-bone active:border-bone active:duration-0 ${className}`}
+      className={`relative inline-flex h-11 w-11 shrink-0 items-center justify-center tactile rounded-lg border border-muted bg-surface text-bone transition hover:border-bone active:border-bone active:duration-0 ${className}`}
     >
       <ShoppingCart size={24} aria-hidden="true" />
       {count > 0 && (

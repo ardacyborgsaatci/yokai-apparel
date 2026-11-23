@@ -78,7 +78,7 @@ export function PurchasePanel({
                 />
                 <label
                   htmlFor={id}
-                  className="flex min-h-14 min-w-16 cursor-pointer flex-col items-center justify-center rounded-lg border border-muted px-4 py-2 text-sm font-semibold transition-colors hover:border-bone active:border-bone active:bg-raised active:duration-0 peer-checked:border-bone peer-checked:bg-bone peer-checked:text-ink peer-checked:active:border-bone peer-checked:active:bg-bone peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-bone peer-disabled:cursor-not-allowed peer-disabled:border-dashed peer-disabled:text-muted peer-disabled:hover:border-muted peer-disabled:active:border-muted peer-disabled:active:bg-transparent"
+                  className="tactile flex min-h-14 min-w-16 cursor-pointer flex-col items-center justify-center rounded-lg border border-muted bg-surface px-4 py-2 text-sm font-semibold transition hover:border-bone active:border-bone active:bg-raised active:duration-0 peer-checked:tactile-bone peer-checked:border-bone peer-checked:bg-bone peer-checked:text-ink peer-checked:active:border-bone peer-checked:active:bg-bone peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-bone peer-disabled:cursor-not-allowed peer-disabled:border-dashed peer-disabled:text-muted peer-disabled:hover:border-muted peer-disabled:active:border-muted peer-disabled:active:bg-surface peer-disabled:shadow-none peer-disabled:active:transform-none"
                 >
                   <span className={soldOut ? "line-through" : undefined}>
                     {variant.size}
@@ -108,7 +108,7 @@ export function PurchasePanel({
       <button
         type="button"
         onClick={onAdd}
-        className="display mt-8 flex min-h-14 w-full items-center justify-center rounded-lg bg-red px-8 text-xl text-bone transition-colors hover:bg-bone hover:text-ink active:bg-bone active:text-ink active:duration-0"
+        className="display mt-8 flex min-h-14 w-full items-center justify-center tactile tactile-red rounded-lg bg-red px-8 text-xl text-bone transition hover:bg-bone hover:text-ink hover:tactile-bone active:bg-bone active:text-ink active:tactile-bone active:duration-0"
       >
         Add to cart
       </button>

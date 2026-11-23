@@ -396,7 +396,7 @@ export function CheckoutView() {
           aria-expanded={summaryOpen}
           aria-controls="order-summary-panel"
           onClick={() => setSummaryOpen((open) => !open)}
-          className="flex min-h-14 w-full items-center justify-between gap-4 rounded-lg border border-muted bg-surface px-4 transition-colors hover:border-bone active:border-bone active:duration-0 lg:hidden"
+          className="flex min-h-14 w-full items-center justify-between gap-4 tactile rounded-lg border border-muted bg-surface px-4 transition hover:border-bone active:border-bone active:duration-0 lg:hidden"
         >
           <span className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-widest">
             Order summary
@@ -410,7 +410,7 @@ export function CheckoutView() {
         </button>
         <div
           id="order-summary-panel"
-          className={`${summaryOpen ? "mt-2 block" : "hidden"} rounded-xl border border-line bg-surface p-4 lg:mt-0 lg:block lg:p-6`}
+          className={`${summaryOpen ? "mt-2 block" : "hidden"} grain-panel rounded-xl border border-line p-4 lg:mt-0 lg:block lg:p-6`}
         >
           <h2 className="display mb-6 hidden text-3xl lg:block">Order summary</h2>
           <OrderSummaryBody
@@ -556,7 +556,7 @@ export function CheckoutView() {
                 </div>
                 <button
                   type="submit"
-                  className="display inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-red px-8 text-lg text-bone transition-colors hover:bg-bone hover:text-ink active:bg-bone active:text-ink active:duration-0 sm:w-auto sm:justify-self-start"
+                  className="display inline-flex min-h-12 w-full items-center justify-center tactile tactile-red rounded-lg bg-red px-8 text-lg text-bone transition hover:bg-bone hover:text-ink hover:tactile-bone active:bg-bone active:text-ink active:tactile-bone active:duration-0 sm:w-auto sm:justify-self-start"
                 >
                   Continue to payment
                 </button>
@@ -643,7 +643,7 @@ export function CheckoutView() {
                 <button
                   type="submit"
                   aria-disabled={busy}
-                  className="display flex min-h-14 w-full items-center justify-center rounded-lg bg-red px-8 text-xl text-bone transition-colors hover:bg-bone hover:text-ink active:bg-bone active:text-ink active:duration-0 aria-disabled:hover:bg-red aria-disabled:hover:text-bone aria-disabled:active:bg-red aria-disabled:active:text-bone"
+                  className="display flex min-h-14 w-full items-center justify-center tactile tactile-red rounded-lg bg-red px-8 text-xl text-bone transition hover:bg-bone hover:text-ink hover:tactile-bone active:bg-bone active:text-ink active:tactile-bone active:duration-0 aria-disabled:hover:bg-red aria-disabled:hover:text-bone aria-disabled:hover:tactile-red aria-disabled:active:bg-red aria-disabled:active:text-bone aria-disabled:active:tactile-red"
                 >
                   {busy ? "Processing..." : `Pay ${formatPrice(totals.totalCents)}`}
                 </button>

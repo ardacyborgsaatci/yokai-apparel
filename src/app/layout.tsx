@@ -16,8 +16,8 @@ const inter = Inter({
 });
 
 // Noto Sans JP 500, only the glyphs used: every name_ja value. The Home hero
-// kanji (Lantern) are the same names. next/font has no `text` option, so this
-// is a <link> element.
+// kanji (parallax layers, 4 names) are the same glyphs. next/font has no
+// `text` option, so this is a <link> element.
 // Add a glyph here when a new name_ja value needs one.
 const JP_GLYPHS = "狐鬼狸河童天狗鵺幽霊絡新婦木霊獏化け猫傘おば";
 const JP_FONT_URL = `https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap&text=${encodeURIComponent(JP_GLYPHS)}`;

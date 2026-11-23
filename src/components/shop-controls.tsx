@@ -99,7 +99,7 @@ export function ShopControls({
                 />
                 <label
                   htmlFor={id}
-                  className="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-lg border border-muted px-4 text-sm font-semibold text-bone transition-colors hover:border-bone active:border-bone active:bg-raised active:duration-0 peer-checked:border-bone peer-checked:bg-bone peer-checked:text-ink peer-checked:active:border-bone peer-checked:active:bg-bone peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-bone"
+                  className="tactile inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-lg border border-muted bg-surface px-4 text-sm font-semibold text-bone transition hover:border-bone active:border-bone active:bg-raised active:duration-0 peer-checked:tactile-bone peer-checked:border-bone peer-checked:bg-bone peer-checked:text-ink peer-checked:active:border-bone peer-checked:active:bg-bone peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-bone"
                 >
                   {value || "All"}
                 </label>
@@ -119,7 +119,7 @@ export function ShopControls({
           onChange={(event) =>
             update({ size: shown.size, sort: event.target.value })
           }
-          className="min-h-11 rounded-lg border border-muted bg-ink px-3 text-sm font-semibold text-bone transition-colors hover:border-bone active:border-bone active:duration-0"
+          className="tactile min-h-11 rounded-lg border border-muted bg-surface px-3 text-sm font-semibold text-bone transition hover:border-bone active:border-bone active:duration-0"
         >
           {SORT_OPTIONS.map((option) => (
             <option key={option.key} value={option.key}>

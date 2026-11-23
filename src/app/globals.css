@@ -154,171 +154,212 @@ body {
   animation: overlay-out 200ms cubic-bezier(0.2, 0, 0, 1) both;
 }
 
-/* Home hero: Lantern (DESIGN.md 6.5). Plain classes, no new color token.
-   --r: light radius. --ks: kanji scale. --ax, --ay: rest position of the light
-   (the first kanji). --lx, --ly: light position. JS writes them in px. */
-.lantern {
-  --r: 80px;
-  --ks: 1;
-  --ax: 83%;
-  --ay: 17%;
-  --lx: var(--ax);
-  --ly: var(--ay);
+/* Tactile depth (DESIGN.md section 4, Phase 6). Three looks: raised controls,
+   recessed inputs and grained panels. Photos and text links stay flat.
+   Shadows use black and the highlight on a bone fill uses white: bone on bone
+   does not show. Everything else comes from the color tokens. */
+:root {
+  /* Grain tile: SVG fractal noise, grayscale, 160px. The hero copy sits under
+     the shade, so the hero grain is 9%. Panels carry text, so theirs is 3.5%
+     (error text on a panel measured 4.80:1 at 3.5%, 4.29:1 at 9%). */
+  --grain-hero: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.09'/%3E%3C/svg%3E");
+  --grain-panel: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");
 }
 
-@media (max-width: 639px) {
-  .lantern {
-    --r: 60px;
-    --ax: 17%;
-    --ay: 12.5%;
+/* Raised. Use with Tailwind `transition` (not `transition-colors`) and
+   `active:duration-0`, so the press starts at once and comes back over 150ms.
+   The top highlight is --edge: bone at 8% by default. A disabled control adds
+   `shadow-none` (stepper at its limit, sold-out chip). A busy control
+   (aria-disabled) keeps its shadow and does not sink. */
+@utility tactile {
+  box-shadow:
+    inset 0 1px 0 var(--edge, color-mix(in srgb, var(--color-bone) 8%, transparent)),
+    0 1px 1px rgb(0 0 0 / 0.28),
+    0 4px 10px -2px rgb(0 0 0 / 0.42);
+
+  /* :where keeps the specificity at zero, so a peer-disabled class can undo it. */
+  &:where(:active:not(:disabled, [aria-disabled="true"])) {
+    transform: translateY(1px);
+    box-shadow: none;
+
+    @media (prefers-reduced-motion: reduce) {
+      transform: none;
+    }
   }
 }
 
-@media (min-width: 640px) and (max-width: 1023px) {
-  .lantern {
-    --ax: 17%;
-    --ay: 12.5%;
-  }
+/* Highlight on a red fill: bone at 22%. */
+@utility tactile-red {
+  --edge: color-mix(in srgb, var(--color-bone) 22%, transparent);
 }
 
-@media (min-width: 1024px) and (max-width: 1279px) {
-  .lantern {
-    --ks: 0.85;
-  }
+/* Highlight on a bone fill (selected chip, primary button on hover and press):
+   white at 60%. */
+@utility tactile-bone {
+  --edge: rgb(255 255 255 / 0.6);
 }
 
-@media (max-width: 359px) {
-  .lantern {
-    --ks: 0.8;
-  }
+/* Recessed: every text input. No press sink. */
+@utility recessed {
+  box-shadow:
+    inset 0 2px 3px rgb(0 0 0 / 0.38),
+    0 1px 0 color-mix(in srgb, var(--color-bone) 5%, transparent);
 }
 
-/* Text protection. .lamp is an empty box in the same grid cell as the text, so
-   its box is the text block. The clip keeps an L shape: all of the area above
-   the text (less 1rem) and all of the area right of it (less 2rem). The beams
-   are positioned against the hero, and the clip applies to them too. */
-.lamp {
-  grid-area: 1 / 1;
+/* Grained panel: surface fill, grain tile, raised top highlight, no outer shadow. */
+@utility grain-panel {
+  background-color: var(--color-surface);
+  background-image: var(--grain-panel);
+  background-size: 160px 160px;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--color-bone) 8%, transparent);
+}
+
+/* Home hero: layered parallax (DESIGN.md 6.6). Plain classes, no new color token.
+   Layers, bottom to top: grain, photo, kanji, shade (HeroLayers, aria-hidden),
+   then the copy. Scroll drift is CSS only, on a view timeline. Pointer tilt
+   writes --tx, --ty and --rot. Drift and tilt sit on different boxes, so they
+   never write the same transform. */
+.hero-layer {
+  position: absolute;
   pointer-events: none;
-  clip-path: polygon(
-    -100vmax -100vmax,
-    100vmax -100vmax,
-    100vmax 100vmax,
-    calc(100% + 2rem) 100vmax,
-    calc(100% + 2rem) -1rem,
-    -100vmax -1rem
-  );
 }
 
-/* Above the veil (-z-16), below the text gradients (-z-10). */
-.lamp-photo {
-  z-index: -14;
-}
-
-/* Above the gradients, below the text. */
-.lamp-kanji {
-  z-index: -6;
-}
-
-.lamp-beam {
-  position: absolute;
+.hero-grain {
   inset: 0;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-image: var(--mask);
-  mask-image: var(--mask);
+  background-image: var(--grain-hero);
+  background-size: 160px 160px;
 }
 
-/* The mask only needs alpha, so it uses plain black. */
-.lamp-lit {
-  --mask: radial-gradient(
-    circle var(--r) at var(--lx) var(--ly),
-    #000 0,
-    #000 38%,
-    rgb(0 0 0 / 0.55) 68%,
-    transparent 100%
-  );
-  background:
-    linear-gradient(
-      color-mix(in srgb, var(--color-bone) 14%, transparent),
-      color-mix(in srgb, var(--color-bone) 14%, transparent)
-    ),
-    url(/images/hero-dark-street.webp) center / cover no-repeat,
-    url(/images/hero-dark-street.webp) center / cover no-repeat,
-    url(/images/hero-dark-street.webp) center / cover no-repeat;
-  background-blend-mode: normal, screen, screen, normal;
+/* Outer box drifts 200px. Its top is 200px above the hero, so the drift never
+   shows an edge. The inner box tilts: inset -32px is room for the tilt. */
+.hero-photo {
+  top: -200px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  --shift: 200px;
 }
 
-.lamp-glyphs {
-  --mask: radial-gradient(
-    circle var(--r) at var(--lx) var(--ly),
-    #000 0,
-    #000 70%,
-    transparent 100%
-  );
-}
-
-/* Kanji: a percentage of the hero, centered on the name. */
-.lamp-k {
+.hero-photo-tilt {
   position: absolute;
-  left: var(--px);
-  top: var(--py);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-  transform: translate(-50%, -50%);
+  inset: -32px;
 }
 
-.lamp-ja {
-  font-size: calc(var(--ps) * var(--ks) * 1px);
-  line-height: 1;
-  writing-mode: vertical-rl;
-  color: var(--color-bone);
-  text-shadow: 0 0 0.12em color-mix(in srgb, var(--color-ink) 60%, transparent);
+.hero-photo-img {
+  opacity: 0.8;
+  object-position: 58% 50%;
 }
 
-.lamp-ro {
-  font-size: 0.625rem;
+.hero-kanji {
+  inset: 0;
+}
+
+.hero-k {
+  position: absolute;
   line-height: 1;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
   white-space: nowrap;
-  color: var(--color-muted);
-  text-shadow: 0 0 0.4em color-mix(in srgb, var(--color-ink) 90%, transparent);
+  user-select: none;
+  color: color-mix(in srgb, var(--color-bone) 14%, transparent);
 }
 
-@media (max-width: 1023px) {
-  .lamp-k-lg {
-    display: none;
+.hero-k-oni {
+  right: -2%;
+  top: -8%;
+  font-size: clamp(15rem, 34vw, 34rem);
+  --shift: 110px;
+}
+
+.hero-k-kitsune {
+  right: 30%;
+  bottom: -14%;
+  font-size: clamp(9rem, 22vw, 22rem);
+  --shift: 60px;
+}
+
+.hero-k-tengu {
+  right: 41%;
+  top: 4%;
+  font-size: clamp(4rem, 8vw, 8rem);
+  writing-mode: vertical-rl;
+  --shift: 140px;
+}
+
+.hero-k-kappa {
+  left: 3%;
+  top: -3%;
+  font-size: clamp(4rem, 9vw, 9rem);
+  --shift: 90px;
+}
+
+/* Shade, static. Ink at the given opacity. Below md: the copy fills the width,
+   so the photo shows only in the band above it. From md: left and bottom. */
+.hero-shade {
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0,
+    color-mix(in srgb, var(--color-ink) 30%, transparent) 4rem,
+    color-mix(in srgb, var(--color-ink) 90%, transparent) 7.5rem,
+    color-mix(in srgb, var(--color-ink) 95%, transparent) 9rem,
+    color-mix(in srgb, var(--color-ink) 95%, transparent) 100%
+  );
+}
+
+@media (min-width: 48rem) {
+  .hero-shade {
+    background:
+      linear-gradient(
+        to right,
+        color-mix(in srgb, var(--color-ink) 94%, transparent) 0,
+        color-mix(in srgb, var(--color-ink) 92%, transparent) 40rem,
+        transparent 70rem
+      ),
+      linear-gradient(
+        to top,
+        color-mix(in srgb, var(--color-ink) 85%, transparent) 0%,
+        transparent 35%
+      );
   }
 }
 
-@media (max-width: 359px) {
-  .lamp-k-tiny {
-    display: none;
+/* Tilt: JS writes the three properties. Without JS, or with a touch pointer or
+   reduced motion, they stay unset and the box does not move. */
+.hero-tilt {
+  transform: translate3d(var(--tx, 0px), var(--ty, 0px), 0) rotate(var(--rot, 0deg));
+}
+
+@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .hero-tilt {
+    will-change: transform;
   }
 }
 
-@media (min-width: 640px) and (max-width: 767px) {
-  /* DESIGN.md 6.5: the hero is taller in this band, so 鬼 and the rest light move up. */
-  .lantern {
-    --ay: 10%;
-  }
-  .lamp-k-mid {
-    display: none;
+@media (prefers-reduced-motion: reduce) {
+  .hero-tilt {
+    transform: none;
   }
 }
 
-@media (min-width: 1024px) {
-  .lamp-k {
-    left: var(--dx);
-    top: var(--dy);
+/* Scroll drift: only where view timelines exist, and only without reduced
+   motion. The global reduced-motion block below is not relied on. */
+@keyframes hero-drift {
+  to {
+    transform: translate3d(0, var(--shift, 0px), 0);
   }
+}
 
-  .lamp-ja {
-    font-size: calc(var(--ds) * var(--ks) * 1px);
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero {
+      view-timeline: --hero block;
+    }
+
+    .hero-scroll {
+      animation: hero-drift linear both;
+      animation-timeline: --hero;
+      animation-range: exit 0% exit 100%;
+      will-change: transform;
+    }
   }
 }
 

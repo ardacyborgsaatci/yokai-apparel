@@ -14,13 +14,13 @@ export function NotFoundContent() {
       <div className="mt-8 flex flex-wrap gap-3">
         <Link
           href="/shop"
-          className="display inline-flex min-h-12 items-center rounded-lg bg-red px-8 text-lg text-bone transition-colors hover:bg-bone hover:text-ink active:bg-bone active:text-ink active:duration-0"
+          className="display inline-flex min-h-12 items-center tactile tactile-red rounded-lg bg-red px-8 text-lg text-bone transition hover:bg-bone hover:text-ink hover:tactile-bone active:bg-bone active:text-ink active:tactile-bone active:duration-0"
         >
           Shop all
         </Link>
         <Link
           href="/"
-          className="display inline-flex min-h-12 items-center rounded-lg border border-bone px-8 text-lg text-bone transition-colors hover:bg-raised active:bg-raised active:duration-0"
+          className="display inline-flex min-h-12 items-center tactile rounded-lg border border-bone bg-surface px-8 text-lg text-bone transition hover:bg-raised active:bg-raised active:duration-0"
         >
           Home
         </Link>

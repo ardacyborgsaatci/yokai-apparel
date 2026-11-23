@@ -29,7 +29,7 @@ export function InlineMessage({
       ref={ref}
       role={role}
       tabIndex={tabIndex}
-      className={`flex items-start gap-3 rounded-xl border bg-surface p-4 ${tone} ${className}`}
+      className={`flex items-start gap-3 grain-panel rounded-xl border p-4 ${tone} ${className}`}
     >
       <Icon size={20} aria-hidden="true" className="mt-0.5 shrink-0" />
       <div>{children}</div>

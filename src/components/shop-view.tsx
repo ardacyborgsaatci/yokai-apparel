@@ -23,10 +23,10 @@ function Chip({
       href={href}
       scroll={false}
       aria-current={active ? "page" : undefined}
-      className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border px-4 text-sm font-semibold transition-colors ${
+      className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border px-4 text-sm font-semibold tactile transition active:duration-0 ${
         active
-          ? "border-bone bg-bone text-ink"
-          : "border-muted text-bone hover:border-bone active:border-bone active:bg-raised active:duration-0"
+          ? "tactile-bone border-bone bg-bone text-ink"
+          : "border-muted bg-surface text-bone hover:border-bone active:border-bone active:bg-raised"
       }`}
     >
       {children}
@@ -111,7 +111,7 @@ export function ShopView({
           </p>
           <Link
             href="/shop"
-            className="display mt-6 inline-flex min-h-12 items-center rounded-lg bg-red px-8 text-lg text-bone transition-colors hover:bg-bone hover:text-ink active:bg-bone active:text-ink active:duration-0"
+            className="display mt-6 inline-flex min-h-12 items-center tactile tactile-red rounded-lg bg-red px-8 text-lg text-bone transition hover:bg-bone hover:text-ink hover:tactile-bone active:bg-bone active:text-ink active:tactile-bone active:duration-0"
           >
             Clear filters
           </Link>

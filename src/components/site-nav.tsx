@@ -73,7 +73,7 @@ export function SiteNav({
           aria-expanded={open}
           aria-controls="mobile-menu"
           onClick={() => setOpen((value) => !value)}
-          className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-muted px-4 text-sm font-semibold uppercase tracking-widest transition-colors hover:border-bone active:border-bone active:duration-0"
+          className="tactile inline-flex min-h-11 items-center gap-2 rounded-lg border border-muted bg-surface px-4 text-sm font-semibold uppercase tracking-widest transition hover:border-bone active:border-bone active:duration-0"
         >
           {open ? (
             <X size={20} aria-hidden="true" />
